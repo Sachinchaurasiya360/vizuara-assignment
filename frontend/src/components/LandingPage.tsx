@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
@@ -29,7 +28,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+        <div className="absolute inset-0 bg-grid-slate-100 mask-[linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <div className="text-center">
@@ -278,7 +277,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
                   "Built-in data preprocessing tools",
                 ].map((benefit, idx) => (
                   <div key={idx} className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-black flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="h-6 w-6 text-black shrink-0 mt-0.5" />
                     <span className="text-lg text-slate-700">{benefit}</span>
                   </div>
                 ))}

@@ -7,7 +7,6 @@ import type {
   TrainTestSplitResponse,
   ModelConfig,
   TrainingResponse,
-  ApiResponse,
 } from "@/types/pipeline.types";
 
 // ============================================

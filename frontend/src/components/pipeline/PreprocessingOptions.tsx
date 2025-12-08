@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import type {
   PreprocessingConfig,
   MissingValueStrategy,
@@ -36,7 +35,6 @@ export function PreprocessingOptions({
     useState<ScalingStrategy["method"]>("standardize");
   const [encodingMethod, setEncodingMethod] =
     useState<EncodingStrategy["method"]>("onehot");
-  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
 
   const numericColumns = columns.filter((col) => col.type === "numeric");
   const categoricalColumns = columns.filter(

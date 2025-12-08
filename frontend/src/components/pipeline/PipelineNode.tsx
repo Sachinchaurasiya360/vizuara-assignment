@@ -69,7 +69,7 @@ export const PipelineNode = memo(
             type="target"
             position={Position.Left}
             isConnectable={isConnectable}
-            className="!bg-slate-400 !w-3 !h-3 !border-2 !border-white"
+            className="bg-slate-400! w-3! h-3! border-2! border-white!"
           />
         )}
 
@@ -95,7 +95,7 @@ export const PipelineNode = memo(
             type="source"
             position={Position.Right}
             isConnectable={isConnectable}
-            className="!bg-slate-400 !w-3 !h-3 !border-2 !border-white"
+            className="bg-slate-400! w-3! h-3! border-2! border-white!"
           />
         )}
       </div>

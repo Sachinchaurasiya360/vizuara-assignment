@@ -1,8 +1,4 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Alert } from "@/components/ui/alert";
-import { Loader } from "@/components/ui/loader";
+import React from "react";
 import { FileUpload } from "@/components/pipeline/FileUpload";
 import { DataPreviewTable } from "@/components/pipeline/DataPreviewTable";
 import { usePipelineStore } from "@/store/usePipelineStore";
@@ -16,10 +12,15 @@ export function UploadStep() {
         <FileUpload />
       ) : (
         <>
-          <Alert variant="success" title="File Uploaded Successfully">
-            {uploadedFile.fileName} - {uploadedFile.rowCount} rows,{" "}
-            {uploadedFile.columnCount} columns
-          </Alert>
+          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+            <h3 className="font-semibold text-green-900">
+              File Uploaded Successfully
+            </h3>
+            <p className="text-green-700">
+              {uploadedFile.fileName} - {uploadedFile.rowCount} rows,{" "}
+              {uploadedFile.columnCount} columns
+            </p>
+          </div>
 
           <DataPreviewTable
             preview={uploadedFile.preview}
