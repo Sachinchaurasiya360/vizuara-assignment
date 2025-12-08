@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Workflow,
   Upload,
@@ -18,12 +19,16 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { usePipelineStore } from "../store/usePipelineStore";
 
-interface LandingPageProps {
-  onGetStarted: () => void;
-}
+export function LandingPage() {
+  const navigate = useNavigate();
+  const { resetPipeline } = usePipelineStore();
 
-export function LandingPage({ onGetStarted }: LandingPageProps) {
+  const handleGetStarted = () => {
+    resetPipeline();
+    navigate("/builder");
+  };
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -56,7 +61,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Button
                 size="lg"
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="bg-black hover:bg-slate-800 text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Get Started Free
@@ -284,7 +289,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
               </div>
               <Button
                 size="lg"
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
                 className="mt-8 bg-black hover:bg-slate-800"
               >
                 Start Building Now
@@ -325,7 +330,7 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
           </p>
           <Button
             size="lg"
-            onClick={onGetStarted}
+            onClick={handleGetStarted}
             className="bg-white text-black hover:bg-slate-100 px-8 py-6 text-lg shadow-xl hover:shadow-2xl transition-all"
           >
             Get Started Free
