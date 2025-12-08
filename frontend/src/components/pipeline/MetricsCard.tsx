@@ -1,24 +1,34 @@
-import React from 'react';
-import { TrendingUp, Target, Award, Activity } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  BarChart, 
-  Bar, 
+import React from "react";
+import { TrendingUp, Target, Award, Activity } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
   LineChart,
   Line,
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
   ResponsiveContainer,
   Cell,
-} from 'recharts';
-import type { TrainingResponse, ModelMetrics, FeatureImportance } from '@/types/pipeline.types';
+} from "recharts";
+import type {
+  TrainingResponse,
+  ModelMetrics,
+  FeatureImportance,
+} from "@/types/pipeline.types";
 
 interface MetricsCardProps {
   results: TrainingResponse;
-  taskType: 'classification' | 'regression';
+  taskType: "classification" | "regression";
 }
 
 export function MetricsCard({ results, taskType }: MetricsCardProps) {
@@ -103,7 +113,7 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
 
   const renderConfusionMatrix = (matrix: number[][]) => {
     const labels = matrix.map((_, idx) => `Class ${idx}`);
-    
+
     return (
       <div className="mt-6">
         <h4 className="text-sm font-semibold mb-4">Confusion Matrix</h4>
@@ -122,12 +132,16 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
             <tbody>
               {matrix.map((row, i) => (
                 <tr key={i}>
-                  <th className="border p-2 bg-slate-50 text-sm">Actual {labels[i]}</th>
+                  <th className="border p-2 bg-slate-50 text-sm">
+                    Actual {labels[i]}
+                  </th>
                   {row.map((value, j) => (
                     <td
                       key={j}
                       className={`border p-2 text-center font-medium ${
-                        i === j ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                        i === j
+                          ? "bg-green-50 text-green-700"
+                          : "bg-red-50 text-red-700"
                       }`}
                     >
                       {value}
@@ -148,13 +162,21 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
       .slice(0, 10);
 
     const colors = [
-      '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', 
-      '#10b981', '#06b6d4', '#6366f1', '#f97316',
+      "#3b82f6",
+      "#8b5cf6",
+      "#ec4899",
+      "#f59e0b",
+      "#10b981",
+      "#06b6d4",
+      "#6366f1",
+      "#f97316",
     ];
 
     return (
       <div className="mt-6">
-        <h4 className="text-sm font-semibold mb-4">Feature Importance (Top 10)</h4>
+        <h4 className="text-sm font-semibold mb-4">
+          Feature Importance (Top 10)
+        </h4>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data} layout="vertical">
             <CartesianGrid strokeDasharray="3 3" />
@@ -163,7 +185,10 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
             <Tooltip />
             <Bar dataKey="importance" radius={[0, 4, 4, 0]}>
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                />
               ))}
             </Bar>
           </BarChart>
@@ -182,38 +207,48 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Main Metrics */}
-        {taskType === 'classification' 
+        {taskType === "classification"
           ? renderClassificationMetrics(metrics)
-          : renderRegressionMetrics(metrics)
-        }
+          : renderRegressionMetrics(metrics)}
 
         {/* Training vs Validation */}
-        {metrics.trainingScore !== undefined && metrics.validationScore !== undefined && (
-          <div className="p-4 bg-slate-50 rounded-lg">
-            <h4 className="text-sm font-semibold mb-3">Model Fit</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-slate-600">Training Score</p>
-                <p className="text-2xl font-bold">{(metrics.trainingScore * 100).toFixed(2)}%</p>
+        {metrics.trainingScore !== undefined &&
+          metrics.validationScore !== undefined && (
+            <div className="p-4 bg-slate-50 rounded-lg">
+              <h4 className="text-sm font-semibold mb-3">Model Fit</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-slate-600">Training Score</p>
+                  <p className="text-2xl font-bold">
+                    {(metrics.trainingScore * 100).toFixed(2)}%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-600">Validation Score</p>
+                  <p className="text-2xl font-bold">
+                    {(metrics.validationScore * 100).toFixed(2)}%
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-slate-600">Validation Score</p>
-                <p className="text-2xl font-bold">{(metrics.validationScore * 100).toFixed(2)}%</p>
-              </div>
+              {Math.abs(metrics.trainingScore - metrics.validationScore) >
+                0.1 && (
+                <p className="text-xs text-orange-600 mt-2">
+                  ⚠️ Large gap between training and validation scores may
+                  indicate overfitting
+                </p>
+              )}
             </div>
-            {Math.abs(metrics.trainingScore - metrics.validationScore) > 0.1 && (
-              <p className="text-xs text-orange-600 mt-2">
-                ⚠️ Large gap between training and validation scores may indicate overfitting
-              </p>
-            )}
-          </div>
-        )}
+          )}
 
         {/* Confusion Matrix */}
-        {confusionMatrix && taskType === 'classification' && renderConfusionMatrix(confusionMatrix)}
+        {confusionMatrix &&
+          taskType === "classification" &&
+          renderConfusionMatrix(confusionMatrix)}
 
         {/* Feature Importance */}
-        {featureImportance && featureImportance.length > 0 && renderFeatureImportance(featureImportance)}
+        {featureImportance &&
+          featureImportance.length > 0 &&
+          renderFeatureImportance(featureImportance)}
       </CardContent>
     </Card>
   );

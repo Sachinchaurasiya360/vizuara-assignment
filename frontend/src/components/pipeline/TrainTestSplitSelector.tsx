@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import { Split } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
-import type { TrainTestSplitConfig, ColumnInfo } from '@/types/pipeline.types';
+import React, { useState } from "react";
+import { Split } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import type { TrainTestSplitConfig, ColumnInfo } from "@/types/pipeline.types";
 
 interface TrainTestSplitSelectorProps {
   columns: ColumnInfo[];
@@ -13,14 +19,20 @@ interface TrainTestSplitSelectorProps {
   isLoading?: boolean;
 }
 
-export function TrainTestSplitSelector({ columns, onSplit, isLoading }: TrainTestSplitSelectorProps) {
+export function TrainTestSplitSelector({
+  columns,
+  onSplit,
+  isLoading,
+}: TrainTestSplitSelectorProps) {
   const [testSize, setTestSize] = useState(20);
   const [shuffle, setShuffle] = useState(true);
   const [stratify, setStratify] = useState(false);
-  const [stratifyColumn, setStratifyColumn] = useState('');
+  const [stratifyColumn, setStratifyColumn] = useState("");
   const [randomState, setRandomState] = useState(42);
 
-  const categoricalColumns = columns.filter(col => col.type === 'categorical');
+  const categoricalColumns = columns.filter(
+    (col) => col.type === "categorical"
+  );
 
   const handleSplit = () => {
     const config: TrainTestSplitConfig = {
@@ -55,13 +67,13 @@ export function TrainTestSplitSelector({ columns, onSplit, isLoading }: TrainTes
             <span>Test ({testSize}%)</span>
           </div>
           <div className="flex h-12 rounded-lg overflow-hidden border">
-            <div 
+            <div
               className="bg-blue-500 flex items-center justify-center text-white font-medium transition-all"
               style={{ width: `${trainSize}%` }}
             >
               {trainSize > 15 && `${trainSize}%`}
             </div>
-            <div 
+            <div
               className="bg-orange-500 flex items-center justify-center text-white font-medium transition-all"
               style={{ width: `${testSize}%` }}
             >
@@ -72,9 +84,7 @@ export function TrainTestSplitSelector({ columns, onSplit, isLoading }: TrainTes
 
         {/* Test Size Slider */}
         <div className="space-y-2">
-          <Label htmlFor="test-size">
-            Test Size: {testSize}%
-          </Label>
+          <Label htmlFor="test-size">Test Size: {testSize}%</Label>
           <Input
             id="test-size"
             type="range"
@@ -133,7 +143,7 @@ export function TrainTestSplitSelector({ columns, onSplit, isLoading }: TrainTes
                 Use stratified split
               </Label>
             </div>
-            
+
             {stratify && (
               <div className="space-y-2">
                 <Label htmlFor="stratify-column">Stratify Column</Label>
@@ -157,12 +167,12 @@ export function TrainTestSplitSelector({ columns, onSplit, isLoading }: TrainTes
           </div>
         )}
 
-        <Button 
-          onClick={handleSplit} 
+        <Button
+          onClick={handleSplit}
           disabled={isLoading || (stratify && !stratifyColumn)}
           className="w-full"
         >
-          {isLoading ? 'Splitting...' : 'Split Dataset'}
+          {isLoading ? "Splitting..." : "Split Dataset"}
         </Button>
       </CardContent>
     </Card>

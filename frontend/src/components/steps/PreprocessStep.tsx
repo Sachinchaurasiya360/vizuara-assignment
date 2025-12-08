@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Alert } from '@/components/ui/alert';
-import { Loader } from '@/components/ui/loader';
-import { PreprocessingOptions } from '@/components/pipeline/PreprocessingOptions';
-import { DataPreviewTable } from '@/components/pipeline/DataPreviewTable';
-import { usePipelineStore } from '@/store/usePipelineStore';
-import { preprocessData } from '@/api/pipeline.api';
-import type { PreprocessingConfig, PreprocessingResponse } from '@/types/pipeline.types';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
+import { Loader } from "@/components/ui/loader";
+import { PreprocessingOptions } from "@/components/pipeline/PreprocessingOptions";
+import { DataPreviewTable } from "@/components/pipeline/DataPreviewTable";
+import { usePipelineStore } from "@/store/usePipelineStore";
+import { preprocessData } from "@/api/pipeline.api";
+import type {
+  PreprocessingConfig,
+  PreprocessingResponse,
+} from "@/types/pipeline.types";
 
 export function PreprocessStep() {
-  const { uploadedFile, setPreprocessingConfig, setLoading, setCurrentStep, setError } = usePipelineStore();
-  const [preprocessedData, setPreprocessedData] = useState<PreprocessingResponse | null>(null);
+  const {
+    uploadedFile,
+    setPreprocessingConfig,
+    setLoading,
+    setCurrentStep,
+    setError,
+  } = usePipelineStore();
+  const [preprocessedData, setPreprocessedData] =
+    useState<PreprocessingResponse | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   if (!uploadedFile) {
@@ -26,13 +36,15 @@ export function PreprocessStep() {
       const response = await preprocessData(uploadedFile.fileId, config);
       setPreprocessedData(response);
       setPreprocessingConfig(config);
-      
+
       // Show success message
       setTimeout(() => {
-        setCurrentStep('split');
+        setCurrentStep("split");
       }, 1000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to preprocess data');
+      setError(
+        err instanceof Error ? err.message : "Failed to preprocess data"
+      );
     } finally {
       setIsProcessing(false);
       setLoading(false);
@@ -50,10 +62,14 @@ export function PreprocessStep() {
 
         {preprocessedData && (
           <div>
-            <Alert variant="success" title="Preprocessing Complete" className="mb-4">
+            <Alert
+              variant="success"
+              title="Preprocessing Complete"
+              className="mb-4"
+            >
               {preprocessedData.transformations.length} transformations applied
             </Alert>
-            
+
             <div className="text-sm space-y-1 mb-4">
               {preprocessedData.rowsRemoved > 0 && (
                 <p>• Rows removed: {preprocessedData.rowsRemoved}</p>
@@ -62,7 +78,9 @@ export function PreprocessStep() {
                 <p>• Columns removed: {preprocessedData.columnsRemoved}</p>
               )}
               {preprocessedData.newColumns.length > 0 && (
-                <p>• New columns created: {preprocessedData.newColumns.length}</p>
+                <p>
+                  • New columns created: {preprocessedData.newColumns.length}
+                </p>
               )}
             </div>
           </div>

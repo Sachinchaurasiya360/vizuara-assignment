@@ -1,5 +1,5 @@
-import React from 'react';
-import { AlertCircle } from 'lucide-react';
+import React from "react";
+import { AlertCircle } from "lucide-react";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -10,7 +10,10 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -21,7 +24,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
   }
 
   render() {
@@ -34,11 +37,14 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               <h1 className="text-xl font-bold">Something went wrong</h1>
             </div>
             <p className="text-slate-600 mb-4">
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              We're sorry, but something unexpected happened. Please try
+              refreshing the page.
             </p>
             {this.state.error && (
               <details className="text-sm bg-slate-50 p-3 rounded">
-                <summary className="cursor-pointer font-medium mb-2">Error Details</summary>
+                <summary className="cursor-pointer font-medium mb-2">
+                  Error Details
+                </summary>
                 <code className="text-xs">{this.state.error.message}</code>
               </details>
             )}

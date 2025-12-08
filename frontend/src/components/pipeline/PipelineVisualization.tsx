@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -6,32 +6,32 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   MarkerType,
-  Edge,
-  Node,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import { PipelineNode } from './PipelineNode';
-import { usePipelineStore } from '@/store/usePipelineStore';
-import type { PipelineStepType } from '@/types/pipeline.types';
+  type Edge,
+  type Node,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import { PipelineNode } from "./PipelineNode";
+import { usePipelineStore } from "@/store/usePipelineStore";
+import type { PipelineStepType } from "@/types/pipeline.types";
 
 const nodeTypes = {
   pipelineNode: PipelineNode,
 };
 
 const STEP_LABELS: Record<PipelineStepType, string> = {
-  upload: 'Upload Data',
-  preprocess: 'Preprocess',
-  split: 'Train/Test Split',
-  model: 'Train Model',
-  results: 'View Results',
+  upload: "Upload Data",
+  preprocess: "Preprocess",
+  split: "Train/Test Split",
+  model: "Train Model",
+  results: "View Results",
 };
 
 const STEP_DESCRIPTIONS: Record<PipelineStepType, string> = {
-  upload: 'Upload your dataset',
-  preprocess: 'Clean and transform data',
-  split: 'Split into train/test sets',
-  model: 'Train ML model',
-  results: 'Analyze performance',
+  upload: "Upload your dataset",
+  preprocess: "Clean and transform data",
+  split: "Split into train/test sets",
+  model: "Train ML model",
+  results: "Analyze performance",
 };
 
 export function PipelineVisualization() {
@@ -41,7 +41,7 @@ export function PipelineVisualization() {
   const initialNodes: Node[] = useMemo(() => {
     return steps.map((step, index) => ({
       id: step.id,
-      type: 'pipelineNode',
+      type: "pipelineNode",
       position: { x: index * 280, y: 100 },
       data: {
         label: STEP_LABELS[step.type],
@@ -60,15 +60,15 @@ export function PipelineVisualization() {
         id: `${step.id}-${nextStep.id}`,
         source: step.id,
         target: nextStep.id,
-        type: 'smoothstep',
-        animated: step.status === 'completed',
+        type: "smoothstep",
+        animated: step.status === "completed",
         style: {
-          stroke: step.status === 'completed' ? '#10b981' : '#e5e7eb',
+          stroke: step.status === "completed" ? "#10b981" : "#e5e7eb",
           strokeWidth: 2,
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: step.status === 'completed' ? '#10b981' : '#e5e7eb',
+          color: step.status === "completed" ? "#10b981" : "#e5e7eb",
         },
       };
     });
@@ -103,14 +103,14 @@ export function PipelineVisualization() {
         const sourceStep = steps.find((s) => s.id === edge.source);
         return {
           ...edge,
-          animated: sourceStep?.status === 'completed',
+          animated: sourceStep?.status === "completed",
           style: {
-            stroke: sourceStep?.status === 'completed' ? '#10b981' : '#e5e7eb',
+            stroke: sourceStep?.status === "completed" ? "#10b981" : "#e5e7eb",
             strokeWidth: 2,
           },
           markerEnd: {
             type: MarkerType.ArrowClosed,
-            color: sourceStep?.status === 'completed' ? '#10b981' : '#e5e7eb',
+            color: sourceStep?.status === "completed" ? "#10b981" : "#e5e7eb",
           },
         };
       })
@@ -120,7 +120,7 @@ export function PipelineVisualization() {
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
       const step = steps.find((s) => s.id === node.id);
-      if (step && (step.status === 'completed' || step.type === currentStep)) {
+      if (step && (step.status === "completed" || step.type === currentStep)) {
         goToStep(step.type);
       }
     },
@@ -142,13 +142,13 @@ export function PipelineVisualization() {
       >
         <Background />
         <Controls />
-        <MiniMap 
+        <MiniMap
           nodeColor={(node) => {
             const step = steps.find((s) => s.id === node.id);
-            if (step?.status === 'completed') return '#10b981';
-            if (step?.status === 'processing') return '#3b82f6';
-            if (step?.status === 'error') return '#ef4444';
-            return '#e5e7eb';
+            if (step?.status === "completed") return "#10b981";
+            if (step?.status === "processing") return "#3b82f6";
+            if (step?.status === "error") return "#ef4444";
+            return "#e5e7eb";
           }}
           maskColor="rgba(0, 0, 0, 0.1)"
         />

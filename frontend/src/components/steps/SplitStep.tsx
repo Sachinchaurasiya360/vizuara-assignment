@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { Alert } from '@/components/ui/alert';
-import { Loader } from '@/components/ui/loader';
-import { TrainTestSplitSelector } from '@/components/pipeline/TrainTestSplitSelector';
-import { DataPreviewTable } from '@/components/pipeline/DataPreviewTable';
-import { usePipelineStore } from '@/store/usePipelineStore';
-import { splitData } from '@/api/pipeline.api';
-import type { TrainTestSplitConfig, TrainTestSplitResponse } from '@/types/pipeline.types';
+import React, { useState } from "react";
+import { Alert } from "@/components/ui/alert";
+import { Loader } from "@/components/ui/loader";
+import { TrainTestSplitSelector } from "@/components/pipeline/TrainTestSplitSelector";
+import { DataPreviewTable } from "@/components/pipeline/DataPreviewTable";
+import { usePipelineStore } from "@/store/usePipelineStore";
+import { splitData } from "@/api/pipeline.api";
+import type {
+  TrainTestSplitConfig,
+  TrainTestSplitResponse,
+} from "@/types/pipeline.types";
 
 export function SplitStep() {
-  const { uploadedFile, setSplitConfig, setLoading, setCurrentStep, setError } = usePipelineStore();
-  const [splitResult, setSplitResult] = useState<TrainTestSplitResponse | null>(null);
+  const { uploadedFile, setSplitConfig, setLoading, setCurrentStep, setError } =
+    usePipelineStore();
+  const [splitResult, setSplitResult] = useState<TrainTestSplitResponse | null>(
+    null
+  );
   const [isSplitting, setIsSplitting] = useState(false);
 
   if (!uploadedFile) {
@@ -25,12 +31,12 @@ export function SplitStep() {
       const response = await splitData(uploadedFile.fileId, config);
       setSplitResult(response);
       setSplitConfig(config);
-      
+
       setTimeout(() => {
-        setCurrentStep('model');
+        setCurrentStep("model");
       }, 1000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to split data');
+      setError(err instanceof Error ? err.message : "Failed to split data");
     } finally {
       setIsSplitting(false);
       setLoading(false);
@@ -48,7 +54,8 @@ export function SplitStep() {
 
         {splitResult && (
           <Alert variant="success" title="Data Split Complete">
-            Training set: {splitResult.trainSize} samples<br />
+            Training set: {splitResult.trainSize} samples
+            <br />
             Testing set: {splitResult.testSize} samples
           </Alert>
         )}
@@ -68,7 +75,7 @@ export function SplitStep() {
             title="Training Set Preview"
             description={`${splitResult.trainSize} samples`}
           />
-          
+
           <DataPreviewTable
             preview={splitResult.testPreview}
             columns={uploadedFile.columns}

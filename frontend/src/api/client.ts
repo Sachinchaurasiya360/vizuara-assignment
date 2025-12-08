@@ -1,7 +1,8 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
-import type { ApiResponse, ApiError } from '@/types/pipeline.types';
+import axios, { AxiosError, type AxiosInstance } from "axios";
+import type { ApiResponse, ApiError } from "@/types/pipeline.types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
 class ApiClient {
   private client: AxiosInstance;
@@ -11,7 +12,7 @@ class ApiClient {
       baseURL: API_BASE_URL,
       timeout: 60000, // 60 seconds for ML operations
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -23,7 +24,7 @@ class ApiClient {
     this.client.interceptors.request.use(
       (config) => {
         // Add auth token if available
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem("authToken");
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -37,11 +38,14 @@ class ApiClient {
       (response) => response,
       (error: AxiosError<ApiError>) => {
         const apiError: ApiError = {
-          message: error.response?.data?.message || error.message || 'An unexpected error occurred',
+          message:
+            error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred",
           code: error.response?.data?.code || error.code,
           details: error.response?.data?.details,
         };
-        
+
         return Promise.reject(apiError);
       }
     );
@@ -83,22 +87,32 @@ class ApiClient {
     }
   }
 
-  async uploadFile(url: string, file: File, onProgress?: (progress: number) => void): Promise<ApiResponse<unknown>> {
+  async uploadFile(
+    url: string,
+    file: File,
+    onProgress?: (progress: number) => void
+  ): Promise<ApiResponse<unknown>> {
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
-      const response = await this.client.post<ApiResponse<unknown>>(url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (progressEvent) => {
-          if (onProgress && progressEvent.total) {
-            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            onProgress(progress);
-          }
-        },
-      });
+      const response = await this.client.post<ApiResponse<unknown>>(
+        url,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            if (onProgress && progressEvent.total) {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              onProgress(progress);
+            }
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {

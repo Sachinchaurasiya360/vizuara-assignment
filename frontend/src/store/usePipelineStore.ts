@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 import type {
   PipelineState,
   PipelineStepType,
@@ -8,7 +8,7 @@ import type {
   TrainTestSplitConfig,
   ModelConfig,
   TrainingResponse,
-} from '@/types/pipeline.types';
+} from "@/types/pipeline.types";
 
 interface PipelineStore extends PipelineState {
   // Actions
@@ -20,22 +20,45 @@ interface PipelineStore extends PipelineState {
   setResults: (results: TrainingResponse) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  updateStepStatus: (stepType: PipelineStepType, status: PipelineState['steps'][0]['status']) => void;
+  updateStepStatus: (
+    stepType: PipelineStepType,
+    status: PipelineState["steps"][0]["status"]
+  ) => void;
   resetPipeline: () => void;
   goToStep: (step: PipelineStepType) => void;
 }
 
 const initialSteps = [
-  { id: 'upload', type: 'upload' as PipelineStepType, status: 'pending' as const },
-  { id: 'preprocess', type: 'preprocess' as PipelineStepType, status: 'pending' as const },
-  { id: 'split', type: 'split' as PipelineStepType, status: 'pending' as const },
-  { id: 'model', type: 'model' as PipelineStepType, status: 'pending' as const },
-  { id: 'results', type: 'results' as PipelineStepType, status: 'pending' as const },
+  {
+    id: "upload",
+    type: "upload" as PipelineStepType,
+    status: "pending" as const,
+  },
+  {
+    id: "preprocess",
+    type: "preprocess" as PipelineStepType,
+    status: "pending" as const,
+  },
+  {
+    id: "split",
+    type: "split" as PipelineStepType,
+    status: "pending" as const,
+  },
+  {
+    id: "model",
+    type: "model" as PipelineStepType,
+    status: "pending" as const,
+  },
+  {
+    id: "results",
+    type: "results" as PipelineStepType,
+    status: "pending" as const,
+  },
 ];
 
 const initialState: PipelineState = {
   steps: initialSteps,
-  currentStep: 'upload',
+  currentStep: "upload",
   uploadedFile: null,
   preprocessingConfig: null,
   splitConfig: null,
@@ -51,18 +74,20 @@ export const usePipelineStore = create<PipelineStore>()(
       ...initialState,
 
       setCurrentStep: (step) =>
-        set({ currentStep: step }, false, 'setCurrentStep'),
+        set({ currentStep: step }, false, "setCurrentStep"),
 
       setUploadedFile: (file) =>
         set(
           (state) => ({
             uploadedFile: file,
             steps: state.steps.map((s) =>
-              s.type === 'upload' ? { ...s, status: 'completed' as const, data: file } : s
+              s.type === "upload"
+                ? { ...s, status: "completed" as const, data: file }
+                : s
             ),
           }),
           false,
-          'setUploadedFile'
+          "setUploadedFile"
         ),
 
       setPreprocessingConfig: (config) =>
@@ -70,11 +95,13 @@ export const usePipelineStore = create<PipelineStore>()(
           (state) => ({
             preprocessingConfig: config,
             steps: state.steps.map((s) =>
-              s.type === 'preprocess' ? { ...s, status: 'completed' as const, data: config } : s
+              s.type === "preprocess"
+                ? { ...s, status: "completed" as const, data: config }
+                : s
             ),
           }),
           false,
-          'setPreprocessingConfig'
+          "setPreprocessingConfig"
         ),
 
       setSplitConfig: (config) =>
@@ -82,11 +109,13 @@ export const usePipelineStore = create<PipelineStore>()(
           (state) => ({
             splitConfig: config,
             steps: state.steps.map((s) =>
-              s.type === 'split' ? { ...s, status: 'completed' as const, data: config } : s
+              s.type === "split"
+                ? { ...s, status: "completed" as const, data: config }
+                : s
             ),
           }),
           false,
-          'setSplitConfig'
+          "setSplitConfig"
         ),
 
       setModelConfig: (config) =>
@@ -94,11 +123,13 @@ export const usePipelineStore = create<PipelineStore>()(
           (state) => ({
             modelConfig: config,
             steps: state.steps.map((s) =>
-              s.type === 'model' ? { ...s, status: 'completed' as const, data: config } : s
+              s.type === "model"
+                ? { ...s, status: "completed" as const, data: config }
+                : s
             ),
           }),
           false,
-          'setModelConfig'
+          "setModelConfig"
         ),
 
       setResults: (results) =>
@@ -106,18 +137,18 @@ export const usePipelineStore = create<PipelineStore>()(
           (state) => ({
             results,
             steps: state.steps.map((s) =>
-              s.type === 'results' ? { ...s, status: 'completed' as const, data: results } : s
+              s.type === "results"
+                ? { ...s, status: "completed" as const, data: results }
+                : s
             ),
           }),
           false,
-          'setResults'
+          "setResults"
         ),
 
-      setLoading: (loading) =>
-        set({ isLoading: loading }, false, 'setLoading'),
+      setLoading: (loading) => set({ isLoading: loading }, false, "setLoading"),
 
-      setError: (error) =>
-        set({ error }, false, 'setError'),
+      setError: (error) => set({ error }, false, "setError"),
 
       updateStepStatus: (stepType, status) =>
         set(
@@ -127,15 +158,13 @@ export const usePipelineStore = create<PipelineStore>()(
             ),
           }),
           false,
-          'updateStepStatus'
+          "updateStepStatus"
         ),
 
-      resetPipeline: () =>
-        set(initialState, false, 'resetPipeline'),
+      resetPipeline: () => set(initialState, false, "resetPipeline"),
 
-      goToStep: (step) =>
-        set({ currentStep: step }, false, 'goToStep'),
+      goToStep: (step) => set({ currentStep: step }, false, "goToStep"),
     }),
-    { name: 'pipeline-store' }
+    { name: "pipeline-store" }
   )
 );

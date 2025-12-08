@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# ML Pipeline Builder - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A production-grade, no-code machine learning pipeline builder with a stunning UI built with React, TypeScript, TailwindCSS, and React Flow.
 
-Currently, two official plugins are available:
+## ✨ Latest UI Enhancements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Beautiful Landing Page
 
-## React Compiler
+- Hero section with gradient backgrounds
+- Feature showcase with 6 interactive cards
+- 5-step process visualization
+- Responsive design for all devices
+- Smooth animations and transitions
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Enhanced Visual Design
 
-## Expanding the ESLint configuration
+- **Gradients Everywhere**: Beautiful blue-to-indigo gradients on buttons, cards, and backgrounds
+- **Improved Cards**: Enhanced shadows, hover effects, and rounded corners (xl)
+- **Better Forms**: Focus states, hover effects, and improved input styling
+- **Animated Progress**: Shimmer effect on progress bars
+- **Custom Scrollbar**: Themed scrollbar matching the design system
+- **Enhanced Alerts**: Different icons for each variant (success, error, warning, info)
+- **Smooth Transitions**: All interactions have fluid animations
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Visual Pipeline Builder**: Interactive drag-and-drop interface powered by React Flow
+- **Complete ML Workflow**: Upload → Preprocess → Split → Train → Results
+- **Type-Safe**: Full TypeScript coverage with comprehensive type definitions
+- **Modern UI**: Built with TailwindCSS and enhanced Shadcn UI components
+- **State Management**: Zustand for efficient state management with DevTools
+- **Error Handling**: Comprehensive error boundaries and validation
+- **Responsive Design**: Works beautifully on desktop, tablet, and mobile devices
+- **Production Ready**: Optimized build configuration with 783.91 kB bundle size
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Technology Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **React 18.3** - Modern React with hooks
+- **TypeScript 5.9** - Full type safety
+- **Vite 7.2** - Lightning-fast build tool
+- **TailwindCSS 4.1** - Utility-first CSS with new v4 syntax
+- **React Flow** - Interactive node-based UI
+- **Zustand** - Lightweight state management
+- **Axios** - Type-safe HTTP client
+- **Lucide React** - 500+ beautiful icons
+- **Recharts** - Data visualization
+
+## 📦 Installation
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚦 Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Application available at `http://localhost:5173`
+
+## 🏗️ Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## 🧪 Testing Features
+
+See [FEATURE_TESTING_GUIDE.md](./FEATURE_TESTING_GUIDE.md) for comprehensive feature testing checklist.
+
+## 🔌 Backend Integration
+
+Configure API endpoint in `.env`:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api
+```
+
+See `STRUCTURE.md` for complete documentation.

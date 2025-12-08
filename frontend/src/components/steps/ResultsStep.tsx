@@ -1,24 +1,32 @@
-import React from 'react';
-import { Download, RotateCcw } from 'lucide-react';
-import { Alert } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { MetricsCard } from '@/components/pipeline/MetricsCard';
-import { usePipelineStore } from '@/store/usePipelineStore';
+import React from "react";
+import { Download, RotateCcw } from "lucide-react";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { MetricsCard } from "@/components/pipeline/MetricsCard";
+import { usePipelineStore } from "@/store/usePipelineStore";
 
 export function ResultsStep() {
   const { results, modelConfig, resetPipeline } = usePipelineStore();
 
   if (!results || !modelConfig) {
-    return <Alert variant="destructive">No results available. Please train a model first.</Alert>;
+    return (
+      <Alert variant="destructive">
+        No results available. Please train a model first.
+      </Alert>
+    );
   }
 
   const handleExport = () => {
     // Export logic would go here
-    console.log('Exporting results...');
+    console.log("Exporting results...");
   };
 
   const handleReset = () => {
-    if (confirm('Are you sure you want to start a new pipeline? This will clear all current data.')) {
+    if (
+      confirm(
+        "Are you sure you want to start a new pipeline? This will clear all current data."
+      )
+    ) {
       resetPipeline();
     }
   };
@@ -29,7 +37,7 @@ export function ResultsStep() {
         <div>
           <h2 className="text-2xl font-bold">Training Complete!</h2>
           <p className="text-slate-600">
-            Model: {modelConfig.modelType.replace(/_/g, ' ')}
+            Model: {modelConfig.modelType.replace(/_/g, " ")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -54,11 +62,15 @@ export function ResultsStep() {
         </div>
         <div className="p-4 border rounded-lg">
           <p className="text-sm text-slate-600">Features Used</p>
-          <p className="text-lg font-semibold">{modelConfig.featureColumns.length}</p>
+          <p className="text-lg font-semibold">
+            {modelConfig.featureColumns.length}
+          </p>
         </div>
         <div className="p-4 border rounded-lg">
           <p className="text-sm text-slate-600">Training Time</p>
-          <p className="text-lg font-semibold">{results.trainingTime.toFixed(2)}s</p>
+          <p className="text-lg font-semibold">
+            {results.trainingTime.toFixed(2)}s
+          </p>
         </div>
       </div>
     </div>

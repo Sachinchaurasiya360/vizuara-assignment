@@ -2,17 +2,17 @@
 // Core Pipeline Types
 // ============================================
 
-export type PipelineStepType = 
-  | 'upload'
-  | 'preprocess'
-  | 'split'
-  | 'model'
-  | 'results';
+export type PipelineStepType =
+  | "upload"
+  | "preprocess"
+  | "split"
+  | "model"
+  | "results";
 
 export interface PipelineStep {
   id: string;
   type: PipelineStepType;
-  status: 'pending' | 'completed' | 'error' | 'processing';
+  status: "pending" | "completed" | "error" | "processing";
   data?: unknown;
   error?: string;
 }
@@ -42,7 +42,7 @@ export interface FileUploadResponse {
 
 export interface ColumnInfo {
   name: string;
-  type: 'numeric' | 'categorical' | 'datetime' | 'text';
+  type: "numeric" | "categorical" | "datetime" | "text";
   uniqueCount: number;
   missingCount: number;
   stats?: ColumnStats;
@@ -67,37 +67,37 @@ export interface DataPreview {
 // Preprocessing Types
 // ============================================
 
-export type PreprocessingOperation = 
-  | 'handleMissing'
-  | 'scaleFeatures'
-  | 'encodeCategories'
-  | 'removeOutliers'
-  | 'featureSelection';
+export type PreprocessingOperation =
+  | "handleMissing"
+  | "scaleFeatures"
+  | "encodeCategories"
+  | "removeOutliers"
+  | "featureSelection";
 
 export interface MissingValueStrategy {
-  strategy: 'drop' | 'mean' | 'median' | 'mode' | 'constant';
+  strategy: "drop" | "mean" | "median" | "mode" | "constant";
   columns: string[];
   fillValue?: string | number;
 }
 
 export interface ScalingStrategy {
-  method: 'standardize' | 'normalize' | 'minmax' | 'robust';
+  method: "standardize" | "normalize" | "minmax" | "robust";
   columns: string[];
 }
 
 export interface EncodingStrategy {
-  method: 'onehot' | 'label' | 'ordinal' | 'target';
+  method: "onehot" | "label" | "ordinal" | "target";
   columns: string[];
 }
 
 export interface OutlierStrategy {
-  method: 'iqr' | 'zscore' | 'isolation';
+  method: "iqr" | "zscore" | "isolation";
   threshold: number;
   columns: string[];
 }
 
 export interface FeatureSelectionStrategy {
-  method: 'correlation' | 'variance' | 'mutual_info' | 'rfe';
+  method: "correlation" | "variance" | "mutual_info" | "rfe";
   nFeatures?: number;
   threshold?: number;
 }
@@ -143,21 +143,21 @@ export interface TrainTestSplitResponse {
 // Model Types
 // ============================================
 
-export type ModelType = 
-  | 'logistic_regression'
-  | 'decision_tree'
-  | 'random_forest'
-  | 'gradient_boosting'
-  | 'svm'
-  | 'knn'
-  | 'naive_bayes'
-  | 'neural_network'
-  | 'linear_regression'
-  | 'ridge'
-  | 'lasso'
-  | 'elasticnet';
+export type ModelType =
+  | "logistic_regression"
+  | "decision_tree"
+  | "random_forest"
+  | "gradient_boosting"
+  | "svm"
+  | "knn"
+  | "naive_bayes"
+  | "neural_network"
+  | "linear_regression"
+  | "ridge"
+  | "lasso"
+  | "elasticnet";
 
-export type TaskType = 'classification' | 'regression';
+export type TaskType = "classification" | "regression";
 
 export interface ModelConfig {
   modelType: ModelType;
@@ -169,7 +169,7 @@ export interface ModelConfig {
 
 export interface HyperparameterConfig {
   name: string;
-  type: 'number' | 'select' | 'boolean' | 'range';
+  type: "number" | "select" | "boolean" | "range";
   value: unknown;
   options?: string[] | number[];
   min?: number;
@@ -207,13 +207,13 @@ export interface ModelMetrics {
   recall?: number;
   f1Score?: number;
   rocAuc?: number;
-  
+
   // Regression metrics
   mse?: number;
   rmse?: number;
   mae?: number;
   r2Score?: number;
-  
+
   // Common
   trainingScore?: number;
   validationScore?: number;
@@ -242,14 +242,14 @@ export interface ConfusionMatrixData {
 export interface PipelineState {
   steps: PipelineStep[];
   currentStep: PipelineStepType | null;
-  
+
   // Data
   uploadedFile: FileUploadResponse | null;
   preprocessingConfig: PreprocessingConfig | null;
   splitConfig: TrainTestSplitConfig | null;
   modelConfig: ModelConfig | null;
   results: TrainingResponse | null;
-  
+
   // UI State
   isLoading: boolean;
   error: string | null;
@@ -279,14 +279,14 @@ export interface ApiError {
 export interface PipelineNodeData {
   label: string;
   type: PipelineStepType;
-  status: PipelineStep['status'];
+  status: PipelineStep["status"];
   icon?: string;
   description?: string;
 }
 
 export type PipelineNode = {
   id: string;
-  type: 'pipelineNode';
+  type: "pipelineNode";
   position: { x: number; y: number };
   data: PipelineNodeData;
 };

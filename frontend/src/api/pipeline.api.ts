@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { apiClient } from "./client";
 import type {
   FileUploadResponse,
   PreprocessingConfig,
@@ -8,7 +8,7 @@ import type {
   ModelConfig,
   TrainingResponse,
   ApiResponse,
-} from '@/types/pipeline.types';
+} from "@/types/pipeline.types";
 
 // ============================================
 // File Upload APIs
@@ -18,12 +18,16 @@ export const uploadFile = async (
   file: File,
   onProgress?: (progress: number) => void
 ): Promise<FileUploadResponse> => {
-  const response = await apiClient.uploadFile('/upload', file, onProgress);
+  const response = await apiClient.uploadFile("/upload", file, onProgress);
   return response.data as FileUploadResponse;
 };
 
-export const getFilePreview = async (fileId: string): Promise<FileUploadResponse> => {
-  const response = await apiClient.get<FileUploadResponse>(`/files/${fileId}/preview`);
+export const getFilePreview = async (
+  fileId: string
+): Promise<FileUploadResponse> => {
+  const response = await apiClient.get<FileUploadResponse>(
+    `/files/${fileId}/preview`
+  );
   return response.data!;
 };
 
@@ -35,7 +39,7 @@ export const preprocessData = async (
   fileId: string,
   config: PreprocessingConfig
 ): Promise<PreprocessingResponse> => {
-  const response = await apiClient.post<PreprocessingResponse>('/preprocess', {
+  const response = await apiClient.post<PreprocessingResponse>("/preprocess", {
     fileId,
     config,
   });
@@ -46,10 +50,13 @@ export const getPreprocessingPreview = async (
   fileId: string,
   config: PreprocessingConfig
 ): Promise<PreprocessingResponse> => {
-  const response = await apiClient.post<PreprocessingResponse>('/preprocess/preview', {
-    fileId,
-    config,
-  });
+  const response = await apiClient.post<PreprocessingResponse>(
+    "/preprocess/preview",
+    {
+      fileId,
+      config,
+    }
+  );
   return response.data!;
 };
 
@@ -61,7 +68,7 @@ export const splitData = async (
   fileId: string,
   config: TrainTestSplitConfig
 ): Promise<TrainTestSplitResponse> => {
-  const response = await apiClient.post<TrainTestSplitResponse>('/split', {
+  const response = await apiClient.post<TrainTestSplitResponse>("/split", {
     fileId,
     config,
   });
@@ -77,7 +84,7 @@ export const trainModel = async (
   modelConfig: ModelConfig,
   splitConfig: TrainTestSplitConfig
 ): Promise<TrainingResponse> => {
-  const response = await apiClient.post<TrainingResponse>('/train', {
+  const response = await apiClient.post<TrainingResponse>("/train", {
     fileId,
     modelConfig,
     splitConfig,
@@ -85,8 +92,12 @@ export const trainModel = async (
   return response.data!;
 };
 
-export const getModelResults = async (modelId: string): Promise<TrainingResponse> => {
-  const response = await apiClient.get<TrainingResponse>(`/models/${modelId}/results`);
+export const getModelResults = async (
+  modelId: string
+): Promise<TrainingResponse> => {
+  const response = await apiClient.get<TrainingResponse>(
+    `/models/${modelId}/results`
+  );
   return response.data!;
 };
 
@@ -94,8 +105,13 @@ export const getModelResults = async (modelId: string): Promise<TrainingResponse
 // Pipeline Management APIs
 // ============================================
 
-export const savePipeline = async (pipelineData: unknown): Promise<{ pipelineId: string }> => {
-  const response = await apiClient.post<{ pipelineId: string }>('/pipelines', pipelineData);
+export const savePipeline = async (
+  pipelineData: unknown
+): Promise<{ pipelineId: string }> => {
+  const response = await apiClient.post<{ pipelineId: string }>(
+    "/pipelines",
+    pipelineData
+  );
   return response.data!;
 };
 
@@ -105,7 +121,7 @@ export const getPipeline = async (pipelineId: string): Promise<unknown> => {
 };
 
 export const listPipelines = async (): Promise<unknown[]> => {
-  const response = await apiClient.get<unknown[]>('/pipelines');
+  const response = await apiClient.get<unknown[]>("/pipelines");
   return response.data!;
 };
 
@@ -117,7 +133,12 @@ export const deletePipeline = async (pipelineId: string): Promise<void> => {
 // Export Predictions
 // ============================================
 
-export const exportPredictions = async (modelId: string, format: 'csv' | 'json'): Promise<Blob> => {
-  const response = await apiClient.get(`/models/${modelId}/export?format=${format}`);
+export const exportPredictions = async (
+  modelId: string,
+  format: "csv" | "json"
+): Promise<Blob> => {
+  const response = await apiClient.get(
+    `/models/${modelId}/export?format=${format}`
+  );
   return response.data as unknown as Blob;
 };
