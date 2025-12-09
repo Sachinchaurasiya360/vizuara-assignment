@@ -56,23 +56,29 @@ export function PipelineVisualization() {
   const initialEdges: Edge[] = useMemo(() => {
     return steps.slice(0, -1).map((step, index) => {
       const nextStep = steps[index + 1];
+      const isCompleted = step.status === "completed";
+      const isCurrent =
+        step.type === currentStep || nextStep.type === currentStep;
+
       return {
         id: `${step.id}-${nextStep.id}`,
         source: step.id,
         target: nextStep.id,
         type: "smoothstep",
-        animated: step.status === "completed",
+        animated: isCompleted,
         style: {
-          stroke: step.status === "completed" ? "#10b981" : "#e5e7eb",
-          strokeWidth: 2,
+          stroke: isCompleted ? "#10b981" : isCurrent ? "#94a3b8" : "#e2e8f0",
+          strokeWidth: isCompleted ? 3 : isCurrent ? 2.5 : 2,
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: step.status === "completed" ? "#10b981" : "#e5e7eb",
+          width: 20,
+          height: 20,
+          color: isCompleted ? "#10b981" : isCurrent ? "#94a3b8" : "#e2e8f0",
         },
       };
     });
-  }, [steps]);
+  }, [steps, currentStep]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -101,21 +107,28 @@ export function PipelineVisualization() {
     setEdges((eds) =>
       eds.map((edge) => {
         const sourceStep = steps.find((s) => s.id === edge.source);
+        const targetStep = steps.find((s) => s.id === edge.target);
+        const isCompleted = sourceStep?.status === "completed";
+        const isCurrent =
+          sourceStep?.type === currentStep || targetStep?.type === currentStep;
+
         return {
           ...edge,
-          animated: sourceStep?.status === "completed",
+          animated: isCompleted,
           style: {
-            stroke: sourceStep?.status === "completed" ? "#10b981" : "#e5e7eb",
-            strokeWidth: 2,
+            stroke: isCompleted ? "#10b981" : isCurrent ? "#94a3b8" : "#e2e8f0",
+            strokeWidth: isCompleted ? 3 : isCurrent ? 2.5 : 2,
           },
           markerEnd: {
             type: MarkerType.ArrowClosed,
-            color: sourceStep?.status === "completed" ? "#10b981" : "#e5e7eb",
+            width: 20,
+            height: 20,
+            color: isCompleted ? "#10b981" : isCurrent ? "#94a3b8" : "#e2e8f0",
           },
         };
       })
     );
-  }, [steps, setEdges]);
+  }, [steps, setEdges, currentStep]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -128,7 +141,7 @@ export function PipelineVisualization() {
   );
 
   return (
-    <div className="h-[300px] bg-slate-50 rounded-lg border">
+    <div className="h-[350px] bg-gradient-to-br from-slate-50 to-slate-100/50">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -137,20 +150,29 @@ export function PipelineVisualization() {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
+        fitViewOptions={{ padding: 0.3 }}
         attributionPosition="bottom-left"
         proOptions={{ hideAttribution: true }}
+        minZoom={0.5}
+        maxZoom={1.5}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
       >
-        <Background />
-        <Controls />
+        <Background gap={16} size={1} color="#e2e8f0" />
+        <Controls
+          className="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg shadow-lg"
+          showInteractive={false}
+        />
         <MiniMap
           nodeColor={(node) => {
             const step = steps.find((s) => s.id === node.id);
             if (step?.status === "completed") return "#10b981";
             if (step?.status === "processing") return "#3b82f6";
             if (step?.status === "error") return "#ef4444";
-            return "#e5e7eb";
+            if (step?.type === currentStep) return "#000000";
+            return "#cbd5e1";
           }}
-          maskColor="rgba(0, 0, 0, 0.1)"
+          maskColor="rgba(248, 250, 252, 0.8)"
+          className="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg shadow-lg"
         />
       </ReactFlow>
     </div>

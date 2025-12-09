@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert } from "@/components/ui/alert";
 import { uploadFile } from "@/api/pipeline.api";
@@ -133,10 +132,13 @@ export function FileUpload() {
                 <p className="text-xl font-semibold text-slate-900">
                   Drop your file here or
                 </p>
-                <label htmlFor="file-upload" className="cursor-pointer">
-                  <Button variant="link" className="mt-2 text-lg">
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer inline-block mt-2"
+                >
+                  <span className="text-lg font-medium text-black hover:text-slate-700 underline underline-offset-4 transition-colors">
                     Browse files
-                  </Button>
+                  </span>
                 </label>
               </div>
               <p className="text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-full">
