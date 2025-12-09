@@ -26,99 +26,47 @@ interface ModelSelectorProps {
   isLoading?: boolean;
 }
 
-// Model metadata
+// Model metadata - focusing on core models with student-friendly descriptions
 const MODELS: Record<
   TaskType,
-  Array<{ type: ModelType; name: string; description: string }>
+  Array<{ type: ModelType; name: string; description: string; icon: string }>
 > = {
   classification: [
     {
       type: "logistic_regression",
       name: "Logistic Regression",
-      description: "Simple, fast, interpretable",
+      description:
+        "Good for simple yes/no predictions. Like predicting if a student will pass based on study hours. Fast and easy to understand!",
+      icon: "📊",
     },
     {
       type: "decision_tree",
-      name: "Decision Tree",
-      description: "Intuitive, handles non-linear data",
-    },
-    {
-      type: "random_forest",
-      name: "Random Forest",
-      description: "Ensemble method, robust",
-    },
-    {
-      type: "gradient_boosting",
-      name: "Gradient Boosting",
-      description: "High accuracy, powerful",
-    },
-    {
-      type: "svm",
-      name: "Support Vector Machine",
-      description: "Effective in high dimensions",
-    },
-    {
-      type: "knn",
-      name: "K-Nearest Neighbors",
-      description: "Instance-based learning",
-    },
-    {
-      type: "naive_bayes",
-      name: "Naive Bayes",
-      description: "Fast, works well with small data",
-    },
-    {
-      type: "neural_network",
-      name: "Neural Network",
-      description: "Deep learning, complex patterns",
+      name: "Decision Tree Classifier",
+      description:
+        "Works like a flowchart with questions! Can handle complex patterns. Like deciding if you should carry an umbrella based on weather, season, and forecast.",
+      icon: "🌳",
     },
   ],
   regression: [
     {
       type: "linear_regression",
       name: "Linear Regression",
-      description: "Simple, interpretable",
-    },
-    {
-      type: "ridge",
-      name: "Ridge Regression",
-      description: "Regularized, prevents overfitting",
-    },
-    {
-      type: "lasso",
-      name: "Lasso Regression",
-      description: "Feature selection, sparse models",
-    },
-    {
-      type: "elasticnet",
-      name: "ElasticNet",
-      description: "Combines Ridge and Lasso",
+      description:
+        "Finds straight-line relationships. Like predicting marks based on study hours - more study = more marks! Simple but powerful.",
+      icon: "📈",
     },
     {
       type: "decision_tree",
-      name: "Decision Tree",
-      description: "Non-linear relationships",
-    },
-    {
-      type: "random_forest",
-      name: "Random Forest",
-      description: "Ensemble, robust",
-    },
-    {
-      type: "gradient_boosting",
-      name: "Gradient Boosting",
-      description: "High accuracy",
-    },
-    {
-      type: "svm",
-      name: "Support Vector Regression",
-      description: "Effective with kernels",
+      name: "Decision Tree Regressor",
+      description:
+        "Like a decision flowchart for numbers. Can predict house prices based on size, location, and age using tree-like decisions.",
+      icon: "🌳",
     },
   ],
 };
 
 // Hyperparameters for each model
-const HYPERPARAMETERS: Record<ModelType, HyperparameterConfig[]> = {
+const HYPERPARAMETERS: Partial<Record<ModelType, HyperparameterConfig[]>> = {
   logistic_regression: [
     {
       name: "C",
@@ -159,146 +107,7 @@ const HYPERPARAMETERS: Record<ModelType, HyperparameterConfig[]> = {
       description: "Minimum samples to split",
     },
   ],
-  random_forest: [
-    {
-      name: "n_estimators",
-      type: "number",
-      value: 100,
-      min: 10,
-      max: 500,
-      step: 10,
-      description: "Number of trees",
-    },
-    {
-      name: "max_depth",
-      type: "number",
-      value: 10,
-      min: 1,
-      max: 50,
-      step: 1,
-      description: "Maximum tree depth",
-    },
-  ],
-  gradient_boosting: [
-    {
-      name: "n_estimators",
-      type: "number",
-      value: 100,
-      min: 10,
-      max: 500,
-      step: 10,
-      description: "Number of boosting stages",
-    },
-    {
-      name: "learning_rate",
-      type: "number",
-      value: 0.1,
-      min: 0.01,
-      max: 1,
-      step: 0.01,
-      description: "Learning rate",
-    },
-  ],
-  svm: [
-    {
-      name: "C",
-      type: "number",
-      value: 1.0,
-      min: 0.1,
-      max: 10,
-      step: 0.1,
-      description: "Regularization parameter",
-    },
-    {
-      name: "kernel",
-      type: "select",
-      value: "rbf",
-      options: ["linear", "poly", "rbf", "sigmoid"],
-      description: "Kernel type",
-    },
-  ],
-  knn: [
-    {
-      name: "n_neighbors",
-      type: "number",
-      value: 5,
-      min: 1,
-      max: 20,
-      step: 1,
-      description: "Number of neighbors",
-    },
-    {
-      name: "weights",
-      type: "select",
-      value: "uniform",
-      options: ["uniform", "distance"],
-      description: "Weight function",
-    },
-  ],
-  naive_bayes: [],
-  neural_network: [
-    {
-      name: "hidden_layer_sizes",
-      type: "number",
-      value: 100,
-      min: 10,
-      max: 500,
-      step: 10,
-      description: "Neurons in hidden layer",
-    },
-    {
-      name: "learning_rate_init",
-      type: "number",
-      value: 0.001,
-      min: 0.0001,
-      max: 0.1,
-      step: 0.0001,
-      description: "Initial learning rate",
-    },
-  ],
   linear_regression: [],
-  ridge: [
-    {
-      name: "alpha",
-      type: "number",
-      value: 1.0,
-      min: 0.01,
-      max: 10,
-      step: 0.1,
-      description: "Regularization strength",
-    },
-  ],
-  lasso: [
-    {
-      name: "alpha",
-      type: "number",
-      value: 1.0,
-      min: 0.01,
-      max: 10,
-      step: 0.1,
-      description: "Regularization strength",
-    },
-  ],
-  elasticnet: [
-    {
-      name: "alpha",
-      type: "number",
-      value: 1.0,
-      min: 0.01,
-      max: 10,
-      step: 0.1,
-      description: "Regularization strength",
-    },
-    {
-      name: "l1_ratio",
-      type: "number",
-      value: 0.5,
-      min: 0,
-      max: 1,
-      step: 0.1,
-      description: "L1 vs L2 mix",
-    },
-  ],
 };
 
 export function ModelSelector({
@@ -318,7 +127,6 @@ export function ModelSelector({
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const models = MODELS[taskType];
-  const selectedModelInfo = models.find((m) => m.type === selectedModel);
   const modelHyperparams = HYPERPARAMETERS[selectedModel] || [];
 
   const handleModelChange = (modelType: ModelType) => {
@@ -368,35 +176,84 @@ export function ModelSelector({
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Model Selection */}
-        <div className="space-y-2">
-          <Label htmlFor="model-type">Model Type</Label>
-          <Select
-            id="model-type"
-            value={selectedModel}
-            onChange={(e) => handleModelChange(e.target.value as ModelType)}
-          >
+        <div className="space-y-3">
+          <Label className="text-base font-semibold">
+            Choose Model (select one)
+          </Label>
+          <div className="grid grid-cols-1 gap-3">
             {models.map((model) => (
-              <option key={model.type} value={model.type}>
-                {model.name}
-              </option>
+              <div
+                key={model.type}
+                onClick={() => handleModelChange(model.type)}
+                className={`
+                  group relative p-5 rounded-lg border-2 cursor-pointer transition-all duration-300
+                  ${
+                    selectedModel === model.type
+                      ? "border-blue-500 bg-gradient-to-br from-blue-50 to-indigo-50 shadow-lg scale-[1.01]"
+                      : "border-gray-200 bg-white hover:border-blue-300 hover:shadow-md"
+                  }
+                `}
+              >
+                <div className="flex items-start space-x-4">
+                  {/* Radio button */}
+                  <div className="flex items-center pt-1">
+                    <input
+                      type="radio"
+                      name="model-selection"
+                      checked={selectedModel === model.type}
+                      onChange={() => handleModelChange(model.type)}
+                      className="w-5 h-5 text-blue-600 cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Model icon */}
+                  <div className="text-4xl">{model.icon}</div>
+
+                  {/* Model details */}
+                  <div className="flex-1">
+                    <h3
+                      className={`text-lg font-semibold mb-1 ${
+                        selectedModel === model.type
+                          ? "text-blue-700"
+                          : "text-gray-800"
+                      }`}
+                    >
+                      {model.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {model.description}
+                    </p>
+                  </div>
+
+                  {/* Selected indicator */}
+                  {selectedModel === model.type && (
+                    <div className="flex items-center">
+                      <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                        Selected
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             ))}
-          </Select>
-          {selectedModelInfo && (
-            <p className="text-sm text-slate-500">
-              {selectedModelInfo.description}
-            </p>
-          )}
+          </div>
         </div>
 
         {/* Target Column */}
         <div className="space-y-2">
-          <Label htmlFor="target-column">Target Column</Label>
+          <Label htmlFor="target-column" className="flex items-center gap-2">
+            Target Column
+            <span className="text-xs text-slate-500 font-normal">
+              (What you want to predict)
+            </span>
+          </Label>
           <Select
             id="target-column"
             value={targetColumn}
             onChange={(e) => setTargetColumn(e.target.value)}
+            className="border-2"
           >
-            <option value="">Select target column</option>
+            <option value="">Select the column to predict...</option>
             {columns.map((col) => (
               <option key={col.name} value={col.name}>
                 {col.name} ({col.type})

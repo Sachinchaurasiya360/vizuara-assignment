@@ -135,6 +135,10 @@ export interface TrainTestSplitResponse {
   success: boolean;
   trainSize: number;
   testSize: number;
+  trainCount: number;
+  testCount: number;
+  trainPercentage: string;
+  testPercentage: string;
   trainPreview: DataPreview;
   testPreview: DataPreview;
 }
@@ -192,12 +196,19 @@ export interface ModelMetadata {
 
 export interface TrainingResponse {
   success: boolean;
-  modelId: string;
-  trainingTime: number;
-  metrics: ModelMetrics;
+  trainMetrics: ModelMetrics;
+  testMetrics: ModelMetrics;
   featureImportance?: FeatureImportance[];
-  confusionMatrix?: number[][];
-  predictions?: Prediction[];
+  trainingTime: string;
+  predictionsSample?: Prediction[];
+  modelInfo?: {
+    type: string;
+    taskType: string;
+    targetColumn: string;
+    featureCount: number;
+    trainSamples: number;
+    testSamples: number;
+  };
 }
 
 export interface ModelMetrics {
@@ -227,6 +238,7 @@ export interface FeatureImportance {
 export interface Prediction {
   actual: string | number;
   predicted: string | number;
+  index: number;
   probability?: number;
 }
 

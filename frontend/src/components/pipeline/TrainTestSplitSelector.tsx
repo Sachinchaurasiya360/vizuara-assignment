@@ -82,6 +82,46 @@ export function TrainTestSplitSelector({
           </div>
         </div>
 
+        {/* Preset Ratios */}
+        <div className="space-y-2">
+          <Label>Common Split Ratios</Label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setTestSize(20)}
+              className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
+                testSize === 20
+                  ? "border-black bg-black text-white"
+                  : "border-slate-300 hover:border-slate-400 bg-white"
+              }`}
+            >
+              80-20
+            </button>
+            <button
+              type="button"
+              onClick={() => setTestSize(30)}
+              className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
+                testSize === 30
+                  ? "border-black bg-black text-white"
+                  : "border-slate-300 hover:border-slate-400 bg-white"
+              }`}
+            >
+              70-30
+            </button>
+            <button
+              type="button"
+              onClick={() => setTestSize(25)}
+              className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
+                testSize === 25
+                  ? "border-black bg-black text-white"
+                  : "border-slate-300 hover:border-slate-400 bg-white"
+              }`}
+            >
+              75-25
+            </button>
+          </div>
+        </div>
+
         {/* Test Size Slider */}
         <div className="space-y-2">
           <Label htmlFor="test-size">Test Size: {testSize}%</Label>

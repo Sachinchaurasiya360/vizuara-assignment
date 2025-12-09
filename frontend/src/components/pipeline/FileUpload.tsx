@@ -24,17 +24,19 @@ export function FileUpload() {
   const handleFileUpload = useCallback(
     async (file: File) => {
       // Validate file type
-      const validTypes = [".csv", ".xlsx", ".xls", ".json"];
+      const validTypes = [".csv", ".xlsx", ".xls"];
       const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
 
       if (!validTypes.includes(fileExtension)) {
-        setError("Please upload a valid file (CSV, Excel, or JSON)");
+        setError("Please upload a CSV or Excel file (.csv, .xlsx, .xls)");
         return;
       }
 
-      // Validate file size (max 100MB)
-      if (file.size > 100 * 1024 * 1024) {
-        setError("File size must be less than 100MB");
+      // Validate file size (max 50MB for better performance)
+      if (file.size > 50 * 1024 * 1024) {
+        setError(
+          "File size must be less than 50MB. Please use a smaller dataset."
+        );
         return;
       }
 

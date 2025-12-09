@@ -80,13 +80,11 @@ export const splitData = async (
 
 export const trainModel = async (
   fileId: string,
-  modelConfig: ModelConfig,
-  splitConfig: TrainTestSplitConfig
+  modelConfig: ModelConfig
 ): Promise<TrainingResponse> => {
   const response = await apiClient.post<TrainingResponse>("/train", {
     fileId,
-    modelConfig,
-    splitConfig,
+    config: modelConfig,
   });
   return response.data!;
 };

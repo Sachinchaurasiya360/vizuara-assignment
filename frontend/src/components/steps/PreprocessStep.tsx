@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Sparkles } from "lucide-react";
 import { Alert } from "@/components/ui/alert";
 import { Loader } from "@/components/ui/loader";
 import { PreprocessingOptions } from "@/components/pipeline/PreprocessingOptions";
@@ -35,11 +36,6 @@ export function PreprocessStep() {
       const response = await preprocessData(uploadedFile.fileId, config);
       setPreprocessedData(response);
       setPreprocessingConfig(config);
-
-      // Show success message
-      setTimeout(() => {
-        setCurrentStep("split");
-      }, 1000);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to preprocess data"
@@ -52,6 +48,50 @@ export function PreprocessStep() {
 
   return (
     <div className="space-y-6">
+      {/* Beginner-friendly explanation */}
+      {!preprocessedData && (
+        <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
+          <h4 className="font-semibold text-purple-900 mb-3 flex items-center gap-2 text-lg">
+            <Sparkles className="h-5 w-5" />
+            🧹 Step 2: Clean Your Data (Optional)
+          </h4>
+          <p className="text-sm text-purple-900 mb-3 leading-relaxed">
+            <strong>Why Clean Data?</strong> Imagine comparing students' marks
+            where one is in percentage (0-100) and another in GPA (0-10). The
+            machine would think GPA students performed poorly! We need to make
+            all numbers comparable.
+          </p>
+          <div className="bg-white/50 rounded-lg p-3 mb-3 space-y-2">
+            <div>
+              <p className="text-sm text-purple-900 font-semibold">
+                🔢 Standardization:
+              </p>
+              <p className="text-xs text-purple-800 ml-4">
+                Converts all values to a similar range, so one column doesn't
+                dominate others. Like converting all marks to a 0-100 scale.
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-purple-900 font-semibold">
+                📊 Normalization:
+              </p>
+              <p className="text-xs text-purple-800 ml-4">
+                Scales all values between 0 and 1. Think of it as converting
+                everything to percentages.
+              </p>
+            </div>
+          </div>
+          <p className="text-sm text-purple-800 font-semibold mb-1">
+            ⏭️ <strong>Can I skip this?</strong>
+          </p>
+          <p className="text-xs text-purple-700 leading-relaxed">
+            Yes! If your data is already clean or all columns are already in
+            similar ranges, you can click "Continue Without Preprocessing"
+            below. This step is optional!
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PreprocessingOptions
           columns={uploadedFile.columns}
@@ -92,6 +132,30 @@ export function PreprocessStep() {
           columns={uploadedFile.columns}
           title="Preprocessed Data Preview"
         />
+      )}
+
+      {/* Next Step button after preprocessing */}
+      {preprocessedData && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setCurrentStep("split")}
+            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-slate-800 font-semibold transition-all shadow-lg hover:shadow-xl"
+          >
+            Continue to Next Step →
+          </button>
+        </div>
+      )}
+
+      {/* Skip option for beginners */}
+      {!preprocessedData && !isProcessing && (
+        <div className="flex justify-center">
+          <button
+            onClick={() => setCurrentStep("split")}
+            className="text-slate-600 hover:text-black underline text-sm font-medium"
+          >
+            Continue Without Preprocessing →
+          </button>
+        </div>
       )}
 
       {isProcessing && (
