@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import csvParser from 'csv-parser';
-import XLSX from 'xlsx';
+import fs from "fs";
+import path from "path";
+import csvParser from "csv-parser";
+import XLSX from "xlsx";
 
 /**
  * Parse CSV file and return data
@@ -11,9 +11,9 @@ export async function parseCSV(filePath) {
     const results = [];
     fs.createReadStream(filePath)
       .pipe(csvParser())
-      .on('data', (data) => results.push(data))
-      .on('end', () => resolve(results))
-      .on('error', (error) => reject(error));
+      .on("data", (data) => results.push(data))
+      .on("end", () => resolve(results))
+      .on("error", (error) => reject(error));
   });
 }
 
@@ -41,21 +41,25 @@ export function analyzeColumns(data) {
   }
 
   const columns = Object.keys(data[0]);
-  const columnInfo = columns.map(col => {
-    const values = data.map(row => row[col]).filter(val => val !== null && val !== undefined && val !== '');
-    const numericValues = values.filter(val => !isNaN(val) && val !== '').map(Number);
-    
+  const columnInfo = columns.map((col) => {
+    const values = data
+      .map((row) => row[col])
+      .filter((val) => val !== null && val !== undefined && val !== "");
+    const numericValues = values
+      .filter((val) => !isNaN(val) && val !== "")
+      .map(Number);
+
     const isNumeric = numericValues.length > values.length * 0.8; // 80% threshold
     const uniqueValues = [...new Set(values)];
     const missingCount = data.length - values.length;
 
     return {
       name: col,
-      type: isNumeric ? 'numeric' : 'categorical',
+      type: isNumeric ? "numeric" : "categorical",
       missingCount,
-      missingPercentage: (missingCount / data.length * 100).toFixed(2),
+      missingPercentage: ((missingCount / data.length) * 100).toFixed(2),
       uniqueValues: uniqueValues.length,
-      sampleValues: uniqueValues.slice(0, 5)
+      sampleValues: uniqueValues.slice(0, 5),
     };
   });
 
@@ -74,7 +78,7 @@ export function getDataPreview(data, rows = 5) {
  */
 export function validateFileType(filename) {
   const ext = path.extname(filename).toLowerCase();
-  const validExtensions = ['.csv', '.xlsx', '.xls'];
+  const validExtensions = [".csv", ".xlsx", ".xls"];
   return validExtensions.includes(ext);
 }
 
@@ -82,59 +86,65 @@ export function validateFileType(filename) {
  * Handle missing values
  */
 export function handleMissingValues(data, strategy, columnInfo) {
-  if (strategy === 'none') return data;
+  if (strategy === "none") return data;
 
-  const processedData = data.map(row => {
+  const processedData = data.map((row) => {
     const newRow = { ...row };
-    
-    columnInfo.forEach(col => {
+
+    columnInfo.forEach((col) => {
       const value = newRow[col.name];
-      
-      if (value === null || value === undefined || value === '') {
-        if (strategy === 'remove') {
+
+      if (value === null || value === undefined || value === "") {
+        if (strategy === "remove") {
           // Will be filtered out later
           newRow.__remove__ = true;
-        } else if (strategy === 'mean' && col.type === 'numeric') {
+        } else if (strategy === "mean" && col.type === "numeric") {
           // Calculate mean
           const numericValues = data
-            .map(r => r[col.name])
-            .filter(v => v !== null && v !== undefined && v !== '' && !isNaN(v))
+            .map((r) => r[col.name])
+            .filter(
+              (v) => v !== null && v !== undefined && v !== "" && !isNaN(v)
+            )
             .map(Number);
-          const mean = numericValues.reduce((a, b) => a + b, 0) / numericValues.length;
+          const mean =
+            numericValues.reduce((a, b) => a + b, 0) / numericValues.length;
           newRow[col.name] = mean;
-        } else if (strategy === 'median' && col.type === 'numeric') {
+        } else if (strategy === "median" && col.type === "numeric") {
           // Calculate median
           const numericValues = data
-            .map(r => r[col.name])
-            .filter(v => v !== null && v !== undefined && v !== '' && !isNaN(v))
+            .map((r) => r[col.name])
+            .filter(
+              (v) => v !== null && v !== undefined && v !== "" && !isNaN(v)
+            )
             .map(Number)
             .sort((a, b) => a - b);
           const mid = Math.floor(numericValues.length / 2);
-          const median = numericValues.length % 2 === 0
-            ? (numericValues[mid - 1] + numericValues[mid]) / 2
-            : numericValues[mid];
+          const median =
+            numericValues.length % 2 === 0
+              ? (numericValues[mid - 1] + numericValues[mid]) / 2
+              : numericValues[mid];
           newRow[col.name] = median;
-        } else if (strategy === 'mode') {
+        } else if (strategy === "mode") {
           // Calculate mode
           const values = data
-            .map(r => r[col.name])
-            .filter(v => v !== null && v !== undefined && v !== '');
+            .map((r) => r[col.name])
+            .filter((v) => v !== null && v !== undefined && v !== "");
           const frequency = {};
-          values.forEach(v => frequency[v] = (frequency[v] || 0) + 1);
-          const mode = Object.keys(frequency).reduce((a, b) => 
+          values.forEach((v) => (frequency[v] = (frequency[v] || 0) + 1));
+          const mode = Object.keys(frequency).reduce((a, b) =>
             frequency[a] > frequency[b] ? a : b
           );
           newRow[col.name] = mode;
         }
       }
     });
-    
+
     return newRow;
   });
 
   // Remove rows if strategy is 'remove'
-  if (strategy === 'remove') {
-    return processedData.filter(row => !row.__remove__);
+  if (strategy === "remove") {
+    return processedData.filter((row) => !row.__remove__);
   }
 
   return processedData;
@@ -147,11 +157,13 @@ export function encodeCategorical(data, columns, columnInfo) {
   const encodingMap = {};
   const processedData = [...data];
 
-  columns.forEach(colName => {
-    const colInfo = columnInfo.find(c => c.name === colName);
-    if (!colInfo || colInfo.type !== 'categorical') return;
+  columns.forEach((colName) => {
+    const colInfo = columnInfo.find((c) => c.name === colName);
+    if (!colInfo || colInfo.type !== "categorical") return;
 
-    const uniqueValues = [...new Set(data.map(row => row[colName]).filter(v => v))];
+    const uniqueValues = [
+      ...new Set(data.map((row) => row[colName]).filter((v) => v)),
+    ];
     const encoding = {};
     uniqueValues.forEach((value, index) => {
       encoding[value] = index;
@@ -159,7 +171,7 @@ export function encodeCategorical(data, columns, columnInfo) {
 
     encodingMap[colName] = encoding;
 
-    processedData.forEach(row => {
+    processedData.forEach((row) => {
       if (row[colName]) {
         row[`${colName}_encoded`] = encoding[row[colName]];
       }
@@ -176,32 +188,35 @@ export function scaleNumeric(data, columns, method, columnInfo) {
   const scalingParams = {};
   const processedData = [...data];
 
-  columns.forEach(colName => {
-    const colInfo = columnInfo.find(c => c.name === colName);
-    if (!colInfo || colInfo.type !== 'numeric') return;
+  columns.forEach((colName) => {
+    const colInfo = columnInfo.find((c) => c.name === colName);
+    if (!colInfo || colInfo.type !== "numeric") return;
 
-    const values = data.map(row => Number(row[colName])).filter(v => !isNaN(v));
-    
-    if (method === 'normalize') {
+    const values = data
+      .map((row) => Number(row[colName]))
+      .filter((v) => !isNaN(v));
+
+    if (method === "normalize") {
       // Min-Max normalization
       const min = Math.min(...values);
       const max = Math.max(...values);
-      scalingParams[colName] = { method: 'normalize', min, max };
+      scalingParams[colName] = { method: "normalize", min, max };
 
-      processedData.forEach(row => {
+      processedData.forEach((row) => {
         const val = Number(row[colName]);
         if (!isNaN(val)) {
           row[`${colName}_scaled`] = (val - min) / (max - min);
         }
       });
-    } else if (method === 'standardize') {
+    } else if (method === "standardize") {
       // Z-score standardization
       const mean = values.reduce((a, b) => a + b, 0) / values.length;
-      const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+      const variance =
+        values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
       const std = Math.sqrt(variance);
-      scalingParams[colName] = { method: 'standardize', mean, std };
+      scalingParams[colName] = { method: "standardize", mean, std };
 
-      processedData.forEach(row => {
+      processedData.forEach((row) => {
         const val = Number(row[colName]);
         if (!isNaN(val)) {
           row[`${colName}_scaled`] = (val - mean) / std;
@@ -219,7 +234,7 @@ export function scaleNumeric(data, columns, method, columnInfo) {
 export function trainTestSplit(data, testSize = 0.2, randomSeed = 42) {
   // Simple random split with seed
   const shuffled = [...data];
-  
+
   // Seeded shuffle
   let seed = randomSeed;
   for (let i = shuffled.length - 1; i > 0; i--) {
