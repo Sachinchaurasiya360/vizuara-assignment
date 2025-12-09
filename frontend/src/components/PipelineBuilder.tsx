@@ -112,9 +112,17 @@ export function PipelineBuilder() {
       {/* Footer */}
       <footer className="bg-white border-t mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-slate-600">
-            Built with React, TypeScript, TailwindCSS, and React Flow
-          </p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-slate-600">
+              Built with React, TypeScript, TailwindCSS, and React Flow
+            </p>
+            <button
+              onClick={() => navigate("/about")}
+              className="text-sm text-slate-600 hover:text-black transition-colors"
+            >
+              About Me
+            </button>
+          </div>
         </div>
       </footer>
     </div>
