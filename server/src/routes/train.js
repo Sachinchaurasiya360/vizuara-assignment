@@ -46,48 +46,49 @@ function prepareData(data, targetColumn, featureColumns, taskType) {
         }]`
       );
 
-      if (uniqueLabels.length > 2) {
-        console.error(
-          `❌ [ERROR] Target column has ${uniqueLabels.length} unique values for classification`
-        );
-
-        // Check if values look continuous (for regression suggestion)
-        const isContinuous = uniqueLabels.length > 10;
-        const errorMsg = isContinuous
-          ? `The target column "${targetColumn}" has ${
-              uniqueLabels.length
-            } unique numeric values [${uniqueLabels
-              .slice(0, 5)
-              .join(
-                ", "
-              )}...]. This looks like a REGRESSION problem, not classification. Please change the task type to "Regression" in the model selection step.`
-          : `The target column "${targetColumn}" has ${
-              uniqueLabels.length
-            } unique values [${uniqueLabels
-              .slice(0, 5)
-              .join(
-                ", "
-              )}...]. Binary classification requires exactly 2 classes (e.g., Yes/No, 0/1, Pass/Fail). Please select a different target column or change to regression.`;
-
-        throw new Error(errorMsg);
-      }
-
       if (uniqueLabels.length < 2) {
         throw new Error(
           `The target column "${targetColumn}" has only 1 unique value. Classification requires at least 2 different classes. Please select a different target column.`
         );
       }
 
-      // Map to binary
-      const labelMap = {
-        [uniqueLabels[0]]: 0,
-        [uniqueLabels[1]]: 1,
-      };
+      // Handle multi-class or binary classification
+      if (uniqueLabels.length > 2) {
+        console.warn(
+          `⚠️ [WARNING] Target column has ${uniqueLabels.length} unique values for classification`
+        );
+        console.warn(
+          `   Mapping to numeric labels 0-${
+            uniqueLabels.length - 1
+          }. Consider using regression if values are continuous.`
+        );
 
-      y = y.map((val) => (labelMap[val] !== undefined ? labelMap[val] : 0));
-      console.log(
-        `   ✅ Converted to binary: ${uniqueLabels[0]} → 0, ${uniqueLabels[1]} → 1`
-      );
+        // Map all unique values to sequential numbers 0, 1, 2, ...
+        const labelMap = {};
+        uniqueLabels.forEach((label, index) => {
+          labelMap[label] = index;
+        });
+
+        y = y.map((val) => (labelMap[val] !== undefined ? labelMap[val] : 0));
+        console.log(
+          `   ✅ Converted to multi-class: ${uniqueLabels
+            .slice(0, 5)
+            .join(", ")}${uniqueLabels.length > 5 ? "..." : ""} → 0-${
+            uniqueLabels.length - 1
+          }`
+        );
+      } else {
+        // Binary classification (2 classes)
+        const labelMap = {
+          [uniqueLabels[0]]: 0,
+          [uniqueLabels[1]]: 1,
+        };
+
+        y = y.map((val) => (labelMap[val] !== undefined ? labelMap[val] : 0));
+        console.log(
+          `   ✅ Converted to binary: ${uniqueLabels[0]} → 0, ${uniqueLabels[1]} → 1`
+        );
+      }
     }
   }
 

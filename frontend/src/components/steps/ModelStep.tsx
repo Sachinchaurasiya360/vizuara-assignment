@@ -21,7 +21,7 @@ export function ModelStep() {
     setError,
   } = usePipelineStore();
   const [isTraining, setIsTraining] = useState(false);
-  const [taskType, setTaskType] = useState<TaskType>("classification");
+  const [taskType, setTaskType] = useState<TaskType>("regression");
 
   if (!uploadedFile || !splitConfig) {
     return (
