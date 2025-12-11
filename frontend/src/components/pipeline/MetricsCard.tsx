@@ -29,7 +29,7 @@ interface MetricsCardProps {
 }
 
 export function MetricsCard({ results, taskType }: MetricsCardProps) {
-  const { metrics, featureImportance, confusionMatrix } = results;
+  const { testMetrics: metrics, featureImportance } = results;
 
   const renderClassificationMetrics = (metrics: ModelMetrics) => (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -108,51 +108,6 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
     </div>
   );
 
-  const renderConfusionMatrix = (matrix: number[][]) => {
-    const labels = matrix.map((_, idx) => `Class ${idx}`);
-
-    return (
-      <div className="mt-6">
-        <h4 className="text-sm font-semibold mb-4">Confusion Matrix</h4>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr>
-                <th className="border p-2 bg-slate-50"></th>
-                {labels.map((label, idx) => (
-                  <th key={idx} className="border p-2 bg-slate-50 text-sm">
-                    Predicted {label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {matrix.map((row, i) => (
-                <tr key={i}>
-                  <th className="border p-2 bg-slate-50 text-sm">
-                    Actual {labels[i]}
-                  </th>
-                  {row.map((value, j) => (
-                    <td
-                      key={j}
-                      className={`border p-2 text-center font-medium ${
-                        i === j
-                          ? "bg-green-50 text-green-700"
-                          : "bg-red-50 text-red-700"
-                      }`}
-                    >
-                      {value}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  };
-
   const renderFeatureImportance = (features: FeatureImportance[]) => {
     const data = features
       .sort((a, b) => b.importance - a.importance)
@@ -199,7 +154,7 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
       <CardHeader>
         <CardTitle>Model Performance Metrics</CardTitle>
         <CardDescription>
-          Training completed in {results.trainingTime.toFixed(2)}s
+          Training completed in {results.trainingTime}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -217,18 +172,19 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
                 <div>
                   <p className="text-sm text-slate-600">Training Score</p>
                   <p className="text-2xl font-bold">
-                    {(metrics.trainingScore * 100).toFixed(2)}%
+                    {(Number(metrics.trainingScore) * 100).toFixed(2)}%
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">Validation Score</p>
                   <p className="text-2xl font-bold">
-                    {(metrics.validationScore * 100).toFixed(2)}%
+                    {(Number(metrics.validationScore) * 100).toFixed(2)}%
                   </p>
                 </div>
               </div>
-              {Math.abs(metrics.trainingScore - metrics.validationScore) >
-                0.1 && (
+              {Math.abs(
+                Number(metrics.trainingScore) - Number(metrics.validationScore)
+              ) > 0.1 && (
                 <p className="text-xs text-orange-600 mt-2">
                   ⚠️ Large gap between training and validation scores may
                   indicate overfitting
@@ -237,15 +193,11 @@ export function MetricsCard({ results, taskType }: MetricsCardProps) {
             </div>
           )}
 
-        {/* Confusion Matrix */}
-        {confusionMatrix &&
-          taskType === "classification" &&
-          renderConfusionMatrix(confusionMatrix)}
-
-        {/* Feature Importance */}
-        {featureImportance &&
-          featureImportance.length > 0 &&
-          renderFeatureImportance(featureImportance)}
+        {featureImportance && featureImportance.length > 0 ? (
+          renderFeatureImportance(featureImportance)
+        ) : (
+          <></>
+        )}
       </CardContent>
     </Card>
   );
@@ -260,7 +212,9 @@ interface MetricItemProps {
 }
 
 function MetricItem({ icon, label, value, color, format }: MetricItemProps) {
-  const displayValue = format ? format(value) : `${(value * 100).toFixed(2)}%`;
+  const displayValue = format
+    ? format(value)
+    : `${(Number(value) * 100).toFixed(2)}%`;
 
   return (
     <div className="p-4 border rounded-lg bg-white">
