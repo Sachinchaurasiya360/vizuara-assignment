@@ -66,13 +66,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// For local development
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`🚀 ML Pipeline Server running on http://localhost:${PORT}`);
-    console.log(`📁 Uploads directory: ${uploadsDir}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`🚀 ML Pipeline Server running on http://localhost:${PORT}`);
+  console.log(`📁 Uploads directory: ${uploadsDir}`);
+});
 
-// Export for Vercel serverless
 export default app;
