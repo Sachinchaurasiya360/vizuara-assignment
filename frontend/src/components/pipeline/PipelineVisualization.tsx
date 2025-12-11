@@ -14,6 +14,7 @@ import { PipelineNode } from "./PipelineNode";
 import { usePipelineStore } from "@/store/usePipelineStore";
 import type { PipelineStepType } from "@/types/pipeline.types";
 
+// Define nodeTypes outside component to avoid React Flow warning
 const nodeTypes = {
   pipelineNode: PipelineNode,
 };

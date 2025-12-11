@@ -130,7 +130,7 @@ export function AboutMe() {
                 Sachin Chaurasiya
               </h2>
               <p className="text-xl text-slate-600 mb-4">
-                Full Stack Developer | Real-time Systems | Performance Engineer
+                Full Stack Developer 
               </p>
               <p className="text-lg text-slate-700 mb-6 leading-relaxed">
                 Computer Science student specializing in full-stack development

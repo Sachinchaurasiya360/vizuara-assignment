@@ -10,7 +10,7 @@ const router = express.Router();
  */
 router.post("/", async (req, res) => {
   try {
-    const { fileId, config } = req.body;
+    const { fileId, config, splitRatio } = req.body;
 
     if (!fileId) {
       return res.status(400).json({ error: "File ID is required" });
@@ -24,9 +24,10 @@ router.post("/", async (req, res) => {
     // Use preprocessed data if available, otherwise use original data
     const data = dataset.processedData || dataset.data;
 
-    // Validate config
-    const testSize = config.testSize || 0.2;
-    const randomSeed = config.randomSeed || 42;
+    // Validate config - support both splitRatio (train ratio) and config.testSize
+    const trainRatio = splitRatio || (config?.trainSize ?? 0.8);
+    const testSize = 1 - trainRatio;
+    const randomSeed = config?.randomSeed || 42;
 
     if (testSize <= 0 || testSize >= 1) {
       return res.status(400).json({
@@ -67,13 +68,13 @@ router.post("/", async (req, res) => {
         trainPreview: {
           headers,
           rows: trainPreview,
-          totalRows: trainData.length
+          totalRows: trainData.length,
         },
         testPreview: {
           headers,
           rows: testPreview,
-          totalRows: testData.length
-        }
+          totalRows: testData.length,
+        },
       },
       message: "Data split successfully",
     });

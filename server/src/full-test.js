@@ -7,7 +7,7 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = "https://vizuara-backend.vercel.app/";
 let fileId = null;
 
 console.log("🧪 Testing ML Pipeline Server Endpoints\n");
@@ -18,7 +18,7 @@ function makeRequest(method, path, data = null, isMultipart = false) {
     const options = {
       hostname: "localhost",
       port: 3001,
-      path: path,
+      path: path, 
       method: method,
       headers: isMultipart
         ? {}

@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 console.log("🧪 Starting API Tests...\n");
 
-const BASE_URL = "http://localhost:3001/api";
+const BASE_URL = "https://vizuara-backend.vercel.app/api";
 let fileId = null;
 
 // Helper function to make API calls

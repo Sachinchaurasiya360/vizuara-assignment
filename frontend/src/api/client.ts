@@ -13,7 +13,9 @@ class ApiClient {
       timeout: 60000, // 60 seconds for ML operations
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
+      withCredentials: false, // Set to true if you need to send cookies
     });
 
     this.setupInterceptors();
