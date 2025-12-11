@@ -66,9 +66,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 ML Pipeline Server running on http://localhost:${PORT}`);
-  console.log(`📁 Uploads directory: ${uploadsDir}`);
-});
+// Only start server if not in production (Vercel will handle this)
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`🚀 ML Pipeline Server running on http://localhost:${PORT}`);
+    console.log(`📁 Uploads directory: ${uploadsDir}`);
+  });
+}
 
 export default app;
