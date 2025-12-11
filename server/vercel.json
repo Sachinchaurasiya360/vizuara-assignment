@@ -6,33 +6,41 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "src/index.js"
+      "source": "/api/(.*)",
+      "destination": "src/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "src/index.js"
     }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "false"
+        },
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
         },
         {
           "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+          "value": "GET,POST,PUT,DELETE,PATCH,OPTIONS"
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "X-Requested-With, Content-Type, Authorization, Accept"
-        },
-        {
-          "key": "Access-Control-Allow-Credentials",
-          "value": "true"
+          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
         }
       ]
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "regions": ["iad1"]
 }

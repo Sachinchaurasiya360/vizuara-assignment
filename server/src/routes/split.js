@@ -36,7 +36,36 @@ router.post("/", async (req, res) => {
     }
 
     // Perform split
+    console.log(
+      `📊 [SPLIT] Splitting data with ratio ${trainRatio}:${testSize}...`
+    );
     const { trainData, testData } = trainTestSplit(data, testSize, randomSeed);
+
+    // Validate split results
+    console.log(
+      `📊 [SPLIT] Train samples: ${trainData.length}, Test samples: ${testData.length}`
+    );
+
+    if (testData.length === 0) {
+      console.error("❌ [ERROR] Test set is empty after split");
+      return res.status(400).json({
+        success: false,
+        error: "Test set is empty. Adjust split ratio or dataset.",
+        details: `With test size ${testSize}, the resulting test set has 0 rows. Try using a larger dataset or different split ratio.`,
+      });
+    }
+
+    if (trainData.length === 0) {
+      console.error("❌ [ERROR] Training set is empty after split");
+      return res.status(400).json({
+        success: false,
+        error: "Training set is empty. Adjust split ratio.",
+      });
+    }
+
+    console.log(
+      `✅ [SPLIT] Split successful - Train: ${trainData.length} rows, Test: ${testData.length} rows`
+    );
 
     // Get previews
     const trainPreview = getDataPreview(trainData, 5);

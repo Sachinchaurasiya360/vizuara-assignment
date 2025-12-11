@@ -39,7 +39,13 @@ export function ModelStep() {
       setModelConfig(config);
       setResults(response);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to train model");
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to train model";
+      console.error("Training error:", errorMessage);
+      setError(errorMessage);
+
+      // Scroll to top to show error
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setIsTraining(false);
       setLoading(false);

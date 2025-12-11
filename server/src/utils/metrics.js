@@ -4,6 +4,10 @@
 export function calculateRegressionMetrics(yTrue, yPred) {
   const n = yTrue.length;
 
+  if (n === 0) {
+    throw new Error("Cannot calculate metrics on empty arrays");
+  }
+
   // Mean Absolute Error
   const mae =
     yTrue.reduce((sum, val, i) => sum + Math.abs(val - yPred[i]), 0) / n;
@@ -25,10 +29,10 @@ export function calculateRegressionMetrics(yTrue, yPred) {
   const r2 = 1 - ssRes / ssTot;
 
   return {
-    mae: mae.toFixed(4),
-    mse: mse.toFixed(4),
-    rmse: rmse.toFixed(4),
-    r2: r2.toFixed(4),
+    mae: Number(mae.toFixed(4)),
+    mse: Number(mse.toFixed(4)),
+    rmse: Number(rmse.toFixed(4)),
+    r2Score: Number(r2.toFixed(4)),
   };
 }
 
@@ -38,36 +42,74 @@ export function calculateRegressionMetrics(yTrue, yPred) {
 export function calculateClassificationMetrics(yTrue, yPred) {
   const n = yTrue.length;
 
-  // Confusion matrix
+  if (n === 0) {
+    throw new Error("Cannot calculate metrics on empty arrays");
+  }
+
+  if (yTrue.length !== yPred.length) {
+    throw new Error(
+      `Array length mismatch: yTrue=${yTrue.length}, yPred=${yPred.length}`
+    );
+  }
+
+  // Confusion matrix - Convert to binary for consistency
   let tp = 0,
     tn = 0,
     fp = 0,
     fn = 0;
 
   for (let i = 0; i < n; i++) {
-    if (yTrue[i] === 1 && yPred[i] === 1) tp++;
-    else if (yTrue[i] === 0 && yPred[i] === 0) tn++;
-    else if (yTrue[i] === 0 && yPred[i] === 1) fp++;
-    else if (yTrue[i] === 1 && yPred[i] === 0) fn++;
+    const trueVal = Number(yTrue[i]);
+    const predVal = Number(yPred[i]);
+
+    if (trueVal === 1 && predVal === 1) tp++;
+    else if (trueVal === 0 && predVal === 0) tn++;
+    else if (trueVal === 0 && predVal === 1) fp++;
+    else if (trueVal === 1 && predVal === 0) fn++;
+  }
+
+  // Validate confusion matrix is not all zeros
+  if (tp === 0 && tn === 0 && fp === 0 && fn === 0) {
+    console.warn(
+      "⚠️ [WARNING] Confusion matrix is all zeros - check data labels"
+    );
+    console.warn(`Sample labels - yTrue: [${yTrue.slice(0, 5).join(", ")}...]`);
+    console.warn(
+      `Sample predictions - yPred: [${yPred.slice(0, 5).join(", ")}...]`
+    );
   }
 
   // Accuracy
-  const accuracy = (tp + tn) / n;
+  const accuracy = n > 0 ? (tp + tn) / n : 0;
 
-  // Precision
-  const precision = tp / (tp + fp) || 0;
+  // Precision - handle division by zero
+  const precision = tp + fp > 0 ? tp / (tp + fp) : 0;
 
-  // Recall
-  const recall = tp / (tp + fn) || 0;
+  // Recall - handle division by zero
+  const recall = tp + fn > 0 ? tp / (tp + fn) : 0;
 
-  // F1 Score
-  const f1 = (2 * (precision * recall)) / (precision + recall) || 0;
+  // F1 Score - handle division by zero
+  const f1 =
+    precision + recall > 0
+      ? (2 * (precision * recall)) / (precision + recall)
+      : 0;
+
+  console.log(
+    `📊 [METRICS] Confusion Matrix - TP: ${tp}, TN: ${tn}, FP: ${fp}, FN: ${fn}`
+  );
+  console.log(
+    `📊 [METRICS] Accuracy: ${(accuracy * 100).toFixed(2)}%, Precision: ${(
+      precision * 100
+    ).toFixed(2)}%, Recall: ${(recall * 100).toFixed(2)}%, F1: ${(
+      f1 * 100
+    ).toFixed(2)}%`
+  );
 
   return {
-    accuracy: accuracy.toFixed(4),
-    precision: precision.toFixed(4),
-    recall: recall.toFixed(4),
-    f1Score: f1.toFixed(4),
+    accuracy: Number(accuracy.toFixed(4)),
+    precision: Number(precision.toFixed(4)),
+    recall: Number(recall.toFixed(4)),
+    f1Score: Number(f1.toFixed(4)),
     confusionMatrix: {
       truePositive: tp,
       trueNegative: tn,

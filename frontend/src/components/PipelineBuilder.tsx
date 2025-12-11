@@ -255,16 +255,20 @@ export function PipelineBuilder() {
             {error && (
               <Alert
                 variant="destructive"
-                title="Error Occurred"
-                className="animate-in slide-in-from-top-2 border-red-200 shadow-md"
+                title="⚠️ Validation Error"
+                className="animate-in slide-in-from-top-2 border-red-300 shadow-lg"
               >
-                <div className="flex justify-between items-start">
-                  <span>{error}</span>
+                <div className="flex justify-between items-start gap-4">
+                  <div className="flex-1">
+                    <p className="text-red-900 font-medium whitespace-pre-line leading-relaxed">
+                      {error}
+                    </p>
+                  </div>
                   <button
                     onClick={() => setError(null)}
-                    className="text-red-900 hover:text-red-700 font-semibold transition-colors text-sm"
+                    className="text-red-900 hover:text-red-700 font-semibold transition-colors text-sm px-3 py-1 hover:bg-red-100 rounded flex-shrink-0"
                   >
-                    Dismiss
+                    ✕ Dismiss
                   </button>
                 </div>
               </Alert>

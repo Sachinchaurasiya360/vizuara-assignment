@@ -140,6 +140,35 @@ export function ModelSelector({
   };
 
   const handleTrain = () => {
+    // Frontend validation before sending to backend
+    if (!targetColumn) {
+      alert("⚠️ Please select a target column before training.");
+      return;
+    }
+
+    // Check target column characteristics
+    const targetColData = columns.find((c) => c.name === targetColumn);
+    if (targetColData) {
+      const uniqueValues = targetColData.uniqueCount || 0;
+
+      // Validate task type matches data characteristics
+      if (taskType === "classification" && uniqueValues > 10) {
+        const confirmMsg = `⚠️ Warning: The target column "${targetColumn}" has ${uniqueValues} unique values.\n\nThis looks like it might be better suited for REGRESSION, not classification.\n\n✓ Classification: Use for categorical data with 2-10 classes (e.g., Yes/No, Pass/Fail)\n✓ Regression: Use for continuous numeric values (e.g., prices, scores, temperatures)\n\nDo you want to continue with classification anyway?`;
+
+        if (!window.confirm(confirmMsg)) {
+          return;
+        }
+      }
+
+      if (taskType === "regression" && uniqueValues <= 2) {
+        const confirmMsg = `⚠️ Warning: The target column "${targetColumn}" has only ${uniqueValues} unique value(s).\n\nThis looks like it might be better suited for CLASSIFICATION, not regression.\n\nDo you want to continue with regression anyway?`;
+
+        if (!window.confirm(confirmMsg)) {
+          return;
+        }
+      }
+    }
+
     const config: ModelConfig = {
       modelType: selectedModel,
       taskType,

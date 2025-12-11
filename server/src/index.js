@@ -18,8 +18,24 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Enable CORS for all origins
-app.use(cors());
+// Enable CORS for all origins with explicit configuration
+app.use(
+  cors({
+    origin: true, // Allow any origin
+    credentials: false,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
+    optionsSuccessStatus: 200,
+  })
+);
+
+// Handle preflight requests
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

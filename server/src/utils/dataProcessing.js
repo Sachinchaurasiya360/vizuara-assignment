@@ -58,7 +58,7 @@ export function analyzeColumns(data) {
       type: isNumeric ? "numeric" : "categorical",
       missingCount,
       missingPercentage: ((missingCount / data.length) * 100).toFixed(2),
-      uniqueValues: uniqueValues.length,
+      uniqueCount: uniqueValues.length,
       sampleValues: uniqueValues.slice(0, 5),
     };
   });
