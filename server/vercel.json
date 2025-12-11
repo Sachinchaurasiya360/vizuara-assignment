@@ -8,17 +8,13 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "src/index.js"
-    },
-    {
       "source": "/(.*)",
-      "destination": "src/index.js"
+      "destination": "/src/index.js"
     }
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Credentials",
@@ -38,9 +34,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "regions": ["iad1"]
+  ]
 }
