@@ -1,3 +1,0 @@
-This is not a CSV file.
-This is just a plain text file.
-It should be rejected by the upload validation.

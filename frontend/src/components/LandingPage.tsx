@@ -10,7 +10,7 @@ import {
   Users,
   ArrowRight,
   CheckCircle,
-  Sparkles,
+  
   Menu,
   X,
 } from "lucide-react";
@@ -170,14 +170,6 @@ export function LandingPage() {
               >
                 Get Started Free
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="px-8 py-6 text-lg border-2 transition-all"
-              >
-                Watch Demo
-                <Sparkles className="ml-2 h-5 w-5" />
               </Button>
             </div>
 
