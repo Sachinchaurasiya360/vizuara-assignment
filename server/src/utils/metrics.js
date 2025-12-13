@@ -132,23 +132,22 @@ export function calculateFeatureImportance(X, y, predictions, featureNames) {
     const variance = calculateVariance(values);
     importance.push({
       feature: featureNames[i] || `Feature ${i + 1}`,
-      importance: variance.toFixed(4),
+      importance: parseFloat(variance.toFixed(4)),
     });
   }
 
-  // Normalize importance
-  const total = importance.reduce(
-    (sum, item) => sum + parseFloat(item.importance),
-    0
-  );
-  importance.forEach((item) => {
-    item.importance =
-      ((parseFloat(item.importance) / total) * 100).toFixed(2) + "%";
-  });
+  // Normalize importance to percentages (0-100)
+  const total = importance.reduce((sum, item) => sum + item.importance, 0);
 
-  return importance.sort(
-    (a, b) => parseFloat(b.importance) - parseFloat(a.importance)
-  );
+  if (total > 0) {
+    importance.forEach((item) => {
+      item.importance = parseFloat(
+        ((item.importance / total) * 100).toFixed(2)
+      );
+    });
+  }
+
+  return importance.sort((a, b) => b.importance - a.importance);
 }
 
 function calculateVariance(values) {

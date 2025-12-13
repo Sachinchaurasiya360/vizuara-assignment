@@ -33,62 +33,73 @@ router.post("/", async (req, res) => {
     const newColumns = [];
 
     // Handle missing values
-    if (config.missingValueStrategy && config.missingValueStrategy !== "none") {
-      const beforeCount = processedData.length;
-      processedData = handleMissingValues(
-        processedData,
-        config.missingValueStrategy,
-        dataset.columnInfo
-      );
-      rowsRemoved = beforeCount - processedData.length;
-      transformations.push({
-        type: "missing_values",
-        strategy: config.missingValueStrategy,
-        rowsAffected: rowsRemoved,
+    if (config.missingValues && config.missingValues.length > 0) {
+      config.missingValues.forEach((mvConfig) => {
+        if (mvConfig.strategy && mvConfig.strategy !== "none") {
+          const beforeCount = processedData.length;
+          processedData = handleMissingValues(
+            processedData,
+            mvConfig.strategy,
+            dataset.columnInfo
+          );
+          const rowsAffected = beforeCount - processedData.length;
+          rowsRemoved += rowsAffected;
+          transformations.push({
+            type: "missing_values",
+            strategy: mvConfig.strategy,
+            columns: mvConfig.columns,
+            rowsAffected,
+          });
+        }
       });
     }
 
     // Encode categorical variables
-    if (config.encodeCategorical && config.encodeCategorical.length > 0) {
-      const { data: encodedData, encodingMap } = encodeCategorical(
-        processedData,
-        config.encodeCategorical,
-        dataset.columnInfo
-      );
-      processedData = encodedData;
+    if (config.encoding && config.encoding.length > 0) {
+      config.encoding.forEach((encConfig) => {
+        if (encConfig.columns && encConfig.columns.length > 0) {
+          const { data: encodedData, encodingMap } = encodeCategorical(
+            processedData,
+            encConfig.columns,
+            dataset.columnInfo
+          );
+          processedData = encodedData;
 
-      const encodedCols = Object.keys(encodingMap);
-      newColumns.push(...encodedCols.map((col) => `${col}_encoded`));
+          const encodedCols = Object.keys(encodingMap);
+          newColumns.push(...encodedCols.map((col) => `${col}_encoded`));
 
-      transformations.push({
-        type: "categorical_encoding",
-        columns: encodedCols,
-        encodingMap,
+          transformations.push({
+            type: "categorical_encoding",
+            method: encConfig.method,
+            columns: encodedCols,
+            encodingMap,
+          });
+        }
       });
     }
 
     // Scale numeric columns
-    if (
-      config.scaleNumeric &&
-      config.scaleNumeric.columns &&
-      config.scaleNumeric.columns.length > 0
-    ) {
-      const { data: scaledData, scalingParams } = scaleNumeric(
-        processedData,
-        config.scaleNumeric.columns,
-        config.scaleNumeric.method,
-        dataset.columnInfo
-      );
-      processedData = scaledData;
+    if (config.scaling && config.scaling.length > 0) {
+      config.scaling.forEach((scaleConfig) => {
+        if (scaleConfig.columns && scaleConfig.columns.length > 0) {
+          const { data: scaledData, scalingParams } = scaleNumeric(
+            processedData,
+            scaleConfig.columns,
+            scaleConfig.method,
+            dataset.columnInfo
+          );
+          processedData = scaledData;
 
-      const scaledCols = Object.keys(scalingParams);
-      newColumns.push(...scaledCols.map((col) => `${col}_scaled`));
+          const scaledCols = Object.keys(scalingParams);
+          newColumns.push(...scaledCols.map((col) => `${col}_scaled`));
 
-      transformations.push({
-        type: "numeric_scaling",
-        method: config.scaleNumeric.method,
-        columns: scaledCols,
-        params: scalingParams,
+          transformations.push({
+            type: "numeric_scaling",
+            method: scaleConfig.method,
+            columns: scaledCols,
+            params: scalingParams,
+          });
+        }
       });
     }
 
