@@ -24,10 +24,10 @@ router.post("/", async (req, res) => {
     // Use preprocessed data if available, otherwise use original data
     const data = dataset.processedData || dataset.data;
 
-    // Validate config - support both splitRatio (train ratio) and config.testSize
-    const trainRatio = splitRatio || (config?.trainSize ?? 0.8);
-    const testSize = 1 - trainRatio;
-    const randomSeed = config?.randomSeed || 42;
+    // Validate config - support both config.testSize and legacy splitRatio
+    const testSize = config?.testSize ?? (splitRatio ? 1 - splitRatio : 0.2);
+    const trainRatio = 1 - testSize;
+    const randomSeed = config?.randomState || config?.randomSeed || 42;
 
     if (testSize <= 0 || testSize >= 1) {
       return res.status(400).json({
