@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Download,
   RotateCcw,
@@ -26,9 +26,35 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { PipelineNarration } from "@/components/pipeline/PipelineNarration";
+import { generatePipelineNarration } from "@/services/pipelineNarrator";
 
 export function ResultsStep() {
-  const { results, modelConfig, resetPipeline } = usePipelineStore();
+  const {
+    results,
+    modelConfig,
+    preprocessingConfig,
+    splitConfig,
+    resetPipeline,
+  } = usePipelineStore();
+
+  // Generate narration only when results are available (memoized for performance)
+  const narration = useMemo(() => {
+    if (!results) return "";
+
+    try {
+      return generatePipelineNarration({
+        preprocessingConfig,
+        splitConfig,
+        modelConfig,
+        results,
+      });
+    } catch (error) {
+      // Gracefully handle any errors in narration generation
+      console.error("Failed to generate pipeline narration:", error);
+      return "";
+    }
+  }, [results, preprocessingConfig, splitConfig, modelConfig]);
 
   if (!results || !modelConfig) {
     return (
@@ -103,7 +129,7 @@ export function ResultsStep() {
   return (
     <div className="space-y-6">
       {/* Beginner-friendly results explanation */}
-      <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5">
+      <div className=" border border-indigo-200 rounded-lg p-5">
         <h4 className="font-semibold text-indigo-900 mb-2 text-lg flex items-center gap-2">
           🎉 Step 5: Understanding Your Results
         </h4>
@@ -152,6 +178,9 @@ export function ResultsStep() {
           )}
         </div>
       </div>
+
+      {/* Pipeline Narration - Human-Readable Summary */}
+      {narration && <PipelineNarration narration={narration} />}
 
       {/* Header with Status */}
       <div className="flex justify-between items-start">

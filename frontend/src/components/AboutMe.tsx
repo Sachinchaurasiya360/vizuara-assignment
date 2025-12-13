@@ -32,7 +32,7 @@ export function AboutMe() {
       "Kafka",
     ],
     frontend: ["React.js", "Next.js", "Tailwind CSS", "Shadcn", "Context API"],
-    devops: ["Docker", "Kubernetes", "AWS (EC2, S3, CDN)", "CI/CD"],
+    devops: ["Docker", "AWS (EC2, S3, CDN)", "CI/CD"],
     database: ["MongoDB", "PostgreSQL", "SQL"],
   };
 
@@ -122,8 +122,11 @@ export function AboutMe() {
         {/* Hero Section */}
         <section className="mb-16">
           <div className="flex flex-col md:flex-row items-start gap-8">
-            <div className="w-32 h-32 bg-black rounded-xl flex items-center justify-center text-white text-4xl font-bold shrink-0">
-              S
+            <div className="w-32 h-26 bg-black rounded-xl flex items-center justify-center text-white text-4xl font-bold shrink-0">
+              <img src="/IMG-20250924-WA0125.jpg" alt="Profile Pic"
+              
+              className="rounded-xl"
+              />
             </div>
             <div className="flex-1">
               <h2 className="text-4xl font-bold text-black mb-2">
@@ -133,7 +136,7 @@ export function AboutMe() {
                 Full Stack Developer 
               </p>
               <p className="text-lg text-slate-700 mb-6 leading-relaxed">
-                Computer Science student specializing in full-stack development
+                Computer Science AI/ML student specializing in full-stack development
                 with strong experience in building scalable systems and
                 real-time applications. Focused on engineering impactful
                 products with clean architecture and performance-oriented
