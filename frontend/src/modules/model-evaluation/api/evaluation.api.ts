@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://vizuara-backends.vercel.app/";
+const API_URL = import.meta.env.VITE_API_URL || "https://vizuara-backends.vercel.app";
 
 /**
  * Upload ground truth CSV
