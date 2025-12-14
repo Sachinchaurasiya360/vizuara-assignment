@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
 
     // Perform split
     console.log(
-      `📊 [SPLIT] Splitting data with ratio ${trainRatio}:${testSize}...`
+      ` [SPLIT] Splitting data with ratio ${trainRatio}:${testSize}...`
     );
     const { trainData, testData } = trainTestSplit(data, testSize, randomSeed);
 

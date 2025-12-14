@@ -10,7 +10,6 @@ import {
   Users,
   ArrowRight,
   CheckCircle,
-  
   Menu,
   X,
 } from "lucide-react";
@@ -166,10 +165,19 @@ export function LandingPage() {
               <Button
                 size="lg"
                 onClick={handleGetStarted}
-                className="bg-black hover:bg-slate-800 text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                className="bg-black hover:bg-slate-800 text-white px-10 py-7 text-xl font-semibold shadow-2xl hover:shadow-xl transition-all hover:scale-105 border-2 border-black"
               >
-                Get Started Free
-                <ArrowRight className="ml-2 h-5 w-5" />
+                Build Your Pipeline
+                <ArrowRight className="ml-2 h-6 w-6" />
+              </Button>
+              <Button
+                size="lg"
+                onClick={() => navigate("/model-evaluation")}
+                variant="outline"
+                className="border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 px-6 py-5 text-base transition-all"
+              >
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Model Evaluation Tool
               </Button>
             </div>
 

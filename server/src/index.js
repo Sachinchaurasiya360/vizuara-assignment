@@ -11,6 +11,7 @@ import uploadRouter from "./routes/upload.js";
 import preprocessRouter from "./routes/preprocess.js";
 import splitRouter from "./routes/split.js";
 import trainRouter from "./routes/train.js";
+import evaluationRouter from "./modules/model-evaluation/routes/evaluation.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -60,6 +61,7 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/preprocess", preprocessRouter);
 app.use("/api/split", splitRouter);
 app.use("/api/train", trainRouter);
+app.use("/api/model-evaluation", evaluationRouter);
 
 // Health check
 app.get("/api/health", (req, res) => {

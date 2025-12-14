@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Download,
   RotateCcw,
@@ -30,6 +31,7 @@ import { PipelineNarration } from "@/components/pipeline/PipelineNarration";
 import { generatePipelineNarration } from "@/services/pipelineNarrator";
 
 export function ResultsStep() {
+  const navigate = useNavigate();
   const {
     results,
     modelConfig,
@@ -203,6 +205,13 @@ export function ResultsStep() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button 
+            className="bg-purple-600 text-white hover:bg-purple-700" 
+            onClick={() => navigate('/model-evaluation')}
+          >
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Evaluate Model
+          </Button>
           <Button variant="outline" onClick={handleExport}>
             <Download className="h-4 w-4 mr-2" />
             Export
