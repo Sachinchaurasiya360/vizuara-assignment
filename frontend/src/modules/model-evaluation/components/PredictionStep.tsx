@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Upload, Plus, Trash2, AlertCircle, CheckCircle } from "lucide-react";
+import { Upload, Plus,  AlertCircle, CheckCircle } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
