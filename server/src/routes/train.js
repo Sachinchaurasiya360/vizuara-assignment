@@ -100,13 +100,20 @@ function prepareData(data, targetColumn, featureColumns, taskType) {
  * Train a machine learning model
  */
 router.post("/", async (req, res) => {
+  // Generate unique request ID for tracking concurrent requests
+  const requestId = `req_${Date.now()}_${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
+
   try {
     const { fileId, config } = req.body;
 
-    console.log("🚀 [START] Model training request received");
+    console.log(`🚀 [START:${requestId}] Model training request received`);
     console.log(`   FileId: ${fileId}`);
     console.log(`   Model: ${config?.modelType}, Task: ${config?.taskType}`);
-    console.log(`   Target: ${config?.targetColumn}, Features: ${config?.featureColumns?.length}`);
+    console.log(
+      `   Target: ${config?.targetColumn}, Features: ${config?.featureColumns?.length}`
+    );
 
     if (!fileId) {
       return res.status(400).json({
@@ -117,6 +124,9 @@ router.post("/", async (req, res) => {
 
     const dataset = getDataset(fileId);
     if (!dataset) {
+      console.error(
+        `❌ [ERROR:${requestId}] Dataset not found for fileId: ${fileId}`
+      );
       return res.status(404).json({
         success: false,
         message: "Dataset not found",
@@ -124,6 +134,9 @@ router.post("/", async (req, res) => {
     }
 
     if (!dataset.trainData || !dataset.testData) {
+      console.error(
+        `❌ [ERROR:${requestId}] Data not split - trainData: ${!!dataset.trainData}, testData: ${!!dataset.testData}`
+      );
       return res.status(400).json({
         success: false,
         message: "Data must be split before training",
@@ -131,21 +144,45 @@ router.post("/", async (req, res) => {
     }
 
     // Deep clone to prevent mutations to shared storage
-    console.log("🔄 [PREPROCESSING] Creating data copies for training...");
+    // IMPORTANT: This ensures each training request gets its own isolated copy
+    console.log(
+      `🔄 [PREPROCESSING:${requestId}] Creating isolated data copies for training...`
+    );
     const trainData = JSON.parse(JSON.stringify(dataset.trainData));
     const testData = JSON.parse(JSON.stringify(dataset.testData));
 
+    // Validate that cloning worked properly
+    if (!trainData || trainData.length === 0) {
+      console.error(
+        `❌ [ERROR:${requestId}] Train data clone is empty or invalid`
+      );
+      return res.status(500).json({
+        success: false,
+        message: "Failed to prepare training data",
+      });
+    }
+
+    if (!testData || testData.length === 0) {
+      console.error(
+        `❌ [ERROR:${requestId}] Test data clone is empty or invalid`
+      );
+      return res.status(500).json({
+        success: false,
+        message: "Failed to prepare test data",
+      });
+    }
+
     // Validation Rule 1: Check if test set is empty
-    console.log("📊 [VALIDATION] Checking split validation...");
+    console.log(`📊 [VALIDATION:${requestId}] Checking split validation...`);
     if (testData.length === 0) {
-      console.error("❌ [ERROR] Test set is empty");
+      console.error(`❌ [ERROR:${requestId}] Test set is empty`);
       return res.status(400).json({
         success: false,
         message: "Test set is empty. Adjust split ratio or dataset.",
       });
     }
     console.log(
-      `✅ [VALIDATION] Train samples: ${trainData.length}, Test samples: ${testData.length}`
+      `✅ [VALIDATION:${requestId}] Train samples: ${trainData.length}, Test samples: ${testData.length}`
     );
 
     // Extract config
@@ -172,7 +209,9 @@ router.post("/", async (req, res) => {
     }
 
     // Validation Rule 2: Check target column exists in both datasets
-    console.log("📊 [VALIDATION] Checking target column existence...");
+    console.log(
+      `📊 [VALIDATION:${requestId}] Checking target column existence...`
+    );
     const trainHasTarget = trainData.length > 0 && targetColumn in trainData[0];
     const testHasTarget = testData.length > 0 && targetColumn in testData[0];
 
@@ -190,11 +229,13 @@ router.post("/", async (req, res) => {
       });
     }
     console.log(
-      `✅ [VALIDATION] Target column "${targetColumn}" exists in both datasets`
+      `✅ [VALIDATION:${requestId}] Target column "${targetColumn}" exists in both datasets`
     );
 
     // Prepare training and test data
-    console.log("📊 [PREPROCESSING] Preparing features and labels...");
+    console.log(
+      `📊 [PREPROCESSING:${requestId}] Preparing features and labels...`
+    );
     const { X: XTrain, y: yTrain } = prepareData(
       trainData,
       targetColumn,
@@ -208,10 +249,16 @@ router.post("/", async (req, res) => {
       taskType
     );
     console.log(
-      `✅ [PREPROCESSING] Features prepared: ${featureColumns.length} features`
+      `✅ [PREPROCESSING:${requestId}] Features prepared: ${featureColumns.length} features`
     );
-    console.log(`   Train set: ${XTrain.length} samples, ${XTrain[0]?.length || 0} features`);
-    console.log(`   Test set: ${XTest.length} samples, ${XTest[0]?.length || 0} features`);
+    console.log(
+      `   Train set: ${XTrain.length} samples, ${
+        XTrain[0]?.length || 0
+      } features`
+    );
+    console.log(
+      `   Test set: ${XTest.length} samples, ${XTest[0]?.length || 0} features`
+    );
     console.log(
       `   Train labels sample: [${yTrain.slice(0, 5).join(", ")}...]`
     );
@@ -222,7 +269,7 @@ router.post("/", async (req, res) => {
     // Validation Rule 2 (continued): Check for single-class training data
     const uniqueTrainLabels = [...new Set(yTrain)];
     console.log(
-      `📊 [VALIDATION] Checking class distribution... Unique classes: ${uniqueTrainLabels.length}`
+      `📊 [VALIDATION:${requestId}] Checking class distribution... Unique classes: ${uniqueTrainLabels.length}`
     );
 
     if (taskType === "classification" && uniqueTrainLabels.length === 1) {
@@ -332,9 +379,17 @@ router.post("/", async (req, res) => {
       testMetrics = calculateClassificationMetrics(yTest, testPredClass);
 
       console.log("📋 [DEBUG] Confusion Matrix Check:");
-      console.log(`   Test predictions sample: [${testPredClass.slice(0, 10).join(", ")}...]`);
-      console.log(`   Test labels sample: [${yTest.slice(0, 10).join(", ")}...]`);
-      console.log(`   Confusion Matrix: TP=${testMetrics.confusionMatrix?.truePositive}, TN=${testMetrics.confusionMatrix?.trueNegative}, FP=${testMetrics.confusionMatrix?.falsePositive}, FN=${testMetrics.confusionMatrix?.falseNegative}`);
+      console.log(
+        `   Test predictions sample: [${testPredClass
+          .slice(0, 10)
+          .join(", ")}...]`
+      );
+      console.log(
+        `   Test labels sample: [${yTest.slice(0, 10).join(", ")}...]`
+      );
+      console.log(
+        `   Confusion Matrix: TP=${testMetrics.confusionMatrix?.truePositive}, TN=${testMetrics.confusionMatrix?.trueNegative}, FP=${testMetrics.confusionMatrix?.falsePositive}, FN=${testMetrics.confusionMatrix?.falseNegative}`
+      );
 
       // Validation Rule 4: Check for zeroed confusion matrix
       const { confusionMatrix } = testMetrics;
@@ -383,8 +438,15 @@ router.post("/", async (req, res) => {
     const timestamp = Date.now();
     const modelKey = `model_${modelType}_${timestamp}`;
 
-    // Get existing model results or initialize
-    const existingModels = dataset.modelResults || {};
+    // CRITICAL: Re-fetch dataset to get the latest modelResults
+    // This prevents race conditions when multiple models train simultaneously
+    const currentDataset = getDataset(fileId);
+    const existingModels = currentDataset?.modelResults || {};
+
+    console.log(
+      `💾 [STORAGE:${requestId}] Saving model results as ${modelKey}`
+    );
+    console.log(`   Existing models: ${Object.keys(existingModels).length}`);
 
     updateDataset(fileId, {
       modelResults: {
@@ -403,12 +465,14 @@ router.post("/", async (req, res) => {
       modelConfig: config,
     });
 
-    console.log("✅ [SUCCESS] Model training and evaluation complete!");
     console.log(
-      `📊 [SUMMARY] Model: ${modelType}, Task: ${taskType}, Time: ${trainingTime}ms`
+      `✅ [SUCCESS:${requestId}] Model training and evaluation complete!`
     );
     console.log(
-      `📊 [SUMMARY] Train/Test: ${XTrain.length}/${XTest.length} samples`
+      `📊 [SUMMARY:${requestId}] Model: ${modelType}, Task: ${taskType}, Time: ${trainingTime}ms`
+    );
+    console.log(
+      `📊 [SUMMARY:${requestId}] Train/Test: ${XTrain.length}/${XTest.length} samples`
     );
 
     res.json({
@@ -431,7 +495,7 @@ router.post("/", async (req, res) => {
       message: "Model trained successfully",
     });
   } catch (error) {
-    console.error("❌ [ERROR] Training failed:", error.message);
+    console.error(`❌ [ERROR:${requestId}] Training failed:`, error.message);
     console.error(error.stack);
     res.status(500).json({
       success: false,

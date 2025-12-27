@@ -16,7 +16,27 @@ export function deleteDataset(fileId) {
 export function updateDataset(fileId, updates) {
   const existing = storage.get(fileId);
   if (existing) {
-    storage.set(fileId, { ...existing, ...updates });
+    // Deep merge for nested objects like modelResults
+    const merged = { ...existing };
+
+    // Special handling for modelResults to prevent race conditions
+    if (updates.modelResults && existing.modelResults) {
+      merged.modelResults = {
+        ...existing.modelResults,
+        ...updates.modelResults,
+      };
+    } else if (updates.modelResults) {
+      merged.modelResults = updates.modelResults;
+    }
+
+    // Apply other updates
+    Object.keys(updates).forEach((key) => {
+      if (key !== "modelResults") {
+        merged[key] = updates[key];
+      }
+    });
+
+    storage.set(fileId, merged);
   }
 }
 
