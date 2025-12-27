@@ -561,10 +561,11 @@ export function WorkflowBuilderPage() {
               const splitResult = await splitData(currentFileId, splitConfig);
               results[step.nodeId] = {
                 type: "split",
+                fileId: currentFileId, // Store fileId for downstream model nodes
                 status: "success",
                 data: splitResult,
               };
-              console.log(`✓ Split step complete`);
+              console.log(`✓ Split step complete. FileId: ${currentFileId}`);
               break;
             }
 
@@ -572,6 +573,7 @@ export function WorkflowBuilderPage() {
               currentFileId = getFileIdFromDependencies();
               if (!currentFileId) throw new Error("No dataset file ID");
               console.log(`→ Model training using FileId: ${currentFileId}`);
+              console.log(`→ Model type: ${(node.config as any).subType}, Target: ${(node.config as any).targetColumn}`);
               const modelConfig = {
                 modelType: (node.config as any).subType,
                 taskType: (node.config as any).taskType || "classification",
@@ -585,7 +587,7 @@ export function WorkflowBuilderPage() {
                 status: "success",
                 data: modelResult,
               };
-              console.log(`✓ Model training complete`);
+              console.log(`✓ Model training complete for ${(node.config as any).subType}`);
               break;
             }
 

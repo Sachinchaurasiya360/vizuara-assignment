@@ -103,6 +103,11 @@ router.post("/", async (req, res) => {
   try {
     const { fileId, config } = req.body;
 
+    console.log("🚀 [START] Model training request received");
+    console.log(`   FileId: ${fileId}`);
+    console.log(`   Model: ${config?.modelType}, Task: ${config?.taskType}`);
+    console.log(`   Target: ${config?.targetColumn}, Features: ${config?.featureColumns?.length}`);
+
     if (!fileId) {
       return res.status(400).json({
         success: false,
@@ -205,10 +210,14 @@ router.post("/", async (req, res) => {
     console.log(
       `✅ [PREPROCESSING] Features prepared: ${featureColumns.length} features`
     );
+    console.log(`   Train set: ${XTrain.length} samples, ${XTrain[0]?.length || 0} features`);
+    console.log(`   Test set: ${XTest.length} samples, ${XTest[0]?.length || 0} features`);
     console.log(
       `   Train labels sample: [${yTrain.slice(0, 5).join(", ")}...]`
     );
     console.log(`   Test labels sample: [${yTest.slice(0, 5).join(", ")}...]`);
+    console.log(`   Train labels unique: ${[...new Set(yTrain)].join(", ")}`);
+    console.log(`   Test labels unique: ${[...new Set(yTest)].join(", ")}`);
 
     // Validation Rule 2 (continued): Check for single-class training data
     const uniqueTrainLabels = [...new Set(yTrain)];
@@ -321,6 +330,11 @@ router.post("/", async (req, res) => {
     if (taskType === "classification") {
       trainMetrics = calculateClassificationMetrics(yTrain, trainPredClass);
       testMetrics = calculateClassificationMetrics(yTest, testPredClass);
+
+      console.log("📋 [DEBUG] Confusion Matrix Check:");
+      console.log(`   Test predictions sample: [${testPredClass.slice(0, 10).join(", ")}...]`);
+      console.log(`   Test labels sample: [${yTest.slice(0, 10).join(", ")}...]`);
+      console.log(`   Confusion Matrix: TP=${testMetrics.confusionMatrix?.truePositive}, TN=${testMetrics.confusionMatrix?.trueNegative}, FP=${testMetrics.confusionMatrix?.falsePositive}, FN=${testMetrics.confusionMatrix?.falseNegative}`);
 
       // Validation Rule 4: Check for zeroed confusion matrix
       const { confusionMatrix } = testMetrics;
