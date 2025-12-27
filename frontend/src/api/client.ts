@@ -2,7 +2,7 @@ import axios, { AxiosError, type AxiosInstance } from "axios";
 import type { ApiResponse, ApiError } from "@/types/pipeline.types";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api";
+  import.meta.env.VITE_API_BASE_URL || "https://vizuara-assignment-seven.vercel.app/";
   // Production: "https://vizuara-backends.vercel.app/api"
 
 class ApiClient {
