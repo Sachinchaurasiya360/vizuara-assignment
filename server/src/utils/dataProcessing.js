@@ -3,9 +3,7 @@ import path from "path";
 import csvParser from "csv-parser";
 import XLSX from "xlsx";
 
-/**
- * Parse CSV file and return data
- */
+
 export async function parseCSV(filePath) {
   return new Promise((resolve, reject) => {
     const results = [];
@@ -17,9 +15,7 @@ export async function parseCSV(filePath) {
   });
 }
 
-/**
- * Parse Excel file and return data
- */
+
 export function parseExcel(filePath) {
   try {
     const workbook = XLSX.readFile(filePath);

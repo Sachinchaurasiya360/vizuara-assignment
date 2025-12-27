@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
 
     // Validate split results
     console.log(
-      `📊 [SPLIT] Train samples: ${trainData.length}, Test samples: ${testData.length}`
+      ` [SPLIT] Train samples: ${trainData.length}, Test samples: ${testData.length}`
     );
 
     if (testData.length === 0) {

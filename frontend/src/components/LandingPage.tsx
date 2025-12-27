@@ -164,11 +164,20 @@ export function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Button
                 size="lg"
-                onClick={handleGetStarted}
-                className="bg-black hover:bg-slate-800 text-white px-10 py-7 text-xl font-semibold shadow-2xl hover:shadow-xl transition-all hover:scale-105 border-2 border-black"
+                onClick={() => navigate("/workflow-builder")}
+                className="bg-gradient-to-r from-black to-slate-700 hover:from-slate-800 hover:to-slate-900 text-white px-10 py-7 text-xl font-semibold shadow-2xl hover:shadow-xl transition-all hover:scale-105"
               >
-                Build Your Pipeline
+                <Workflow className="mr-2 h-6 w-6" />
+                Drag & Drop Builder
                 <ArrowRight className="ml-2 h-6 w-6" />
+              </Button>
+              <Button
+                size="lg"
+                onClick={handleGetStarted}
+                variant="outline"
+                className="border-2 border-black text-black hover:bg-black hover:text-white px-8 py-7 text-lg font-semibold transition-all"
+              >
+                Classic Pipeline
               </Button>
               <Button
                 size="lg"
@@ -177,7 +186,7 @@ export function LandingPage() {
                 className="border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 px-6 py-5 text-base transition-all"
               >
                 <BarChart3 className="mr-2 h-4 w-4" />
-                Model Evaluation Tool
+                Model Evaluation
               </Button>
             </div>
 

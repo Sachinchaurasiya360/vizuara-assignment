@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -41,8 +40,7 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Create uploads directory if it doesn't exist
-// Use /tmp for serverless environments (Vercel), local directory otherwise
+
 const uploadsDir =
   process.env.NODE_ENV === "production"
     ? "/tmp/uploads"
@@ -77,11 +75,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Only start server if not in production (Vercel will handle this)
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
     console.log(`🚀 ML Pipeline Server running on http://localhost:${PORT}`);
-    console.log(`📁 Uploads directory: ${uploadsDir}`);
   });
 }
 

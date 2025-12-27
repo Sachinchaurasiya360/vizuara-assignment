@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Alert } from "./ui/alert";
-import { PipelineVisualization } from "./pipeline/PipelineVisualization";
 import { UploadStep } from "./steps/UploadStep";
 import { PreprocessStep } from "./steps/PreprocessStep";
 import { SplitStep } from "./steps/SplitStep";
@@ -314,7 +313,7 @@ export function PipelineBuilder() {
             </div>
 
             {/* Pipeline Visualization */}
-            {showVisualization && (
+            {/* {showVisualization && (
               <div className="bg-white rounded-2xl shadow-md border border-slate-200/60 overflow-hidden animate-fade-in">
                 <div className="border-b border-slate-200/60 px-6 py-4 bg-gradient-to-r from-slate-50 to-white">
                   <h2 className="font-bold text-slate-900 flex items-center gap-2">
@@ -324,7 +323,7 @@ export function PipelineBuilder() {
                 </div>
                 <PipelineVisualization />
               </div>
-            )}
+            )} */}
 
             {/* Error Alert */}
             {error && (

@@ -28,7 +28,6 @@ const storage = multer.diskStorage({
         ? "/tmp/uploads"
         : path.join(__dirname, "../../uploads");
 
-    // Ensure directory exists
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -43,7 +42,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+  limits: { fileSize: 50 * 1024 * 1024 }, 
   fileFilter: (req, file, cb) => {
     if (validateFileType(file.originalname)) {
       cb(null, true);
@@ -95,11 +94,11 @@ router.post("/", upload.single("file"), async (req, res) => {
       });
     }
 
-    // Analyze columns
+    
     const columnInfo = analyzeColumns(data);
     const preview = getDataPreview(data, 10);
 
-    // Store data in memory
+ 
     saveDataset(fileId, {
       fileId,
       fileName: req.file.originalname,

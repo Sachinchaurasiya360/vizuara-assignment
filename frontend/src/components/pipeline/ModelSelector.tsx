@@ -281,7 +281,7 @@ export function ModelSelector({
             value={targetColumn}
             onChange={(e) => setTargetColumn(e.target.value)}
             className="border-2"
-          >
+          > 
             <option value="">Select the column to predict...</option>
             {columns.map((col) => (
               <option key={col.name} value={col.name}>
