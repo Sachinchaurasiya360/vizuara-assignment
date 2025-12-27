@@ -125,9 +125,14 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // Deep clone to prevent mutations to shared storage
+    console.log("🔄 [PREPROCESSING] Creating data copies for training...");
+    const trainData = JSON.parse(JSON.stringify(dataset.trainData));
+    const testData = JSON.parse(JSON.stringify(dataset.testData));
+
     // Validation Rule 1: Check if test set is empty
     console.log("📊 [VALIDATION] Checking split validation...");
-    if (dataset.testData.length === 0) {
+    if (testData.length === 0) {
       console.error("❌ [ERROR] Test set is empty");
       return res.status(400).json({
         success: false,
@@ -135,7 +140,7 @@ router.post("/", async (req, res) => {
       });
     }
     console.log(
-      `✅ [VALIDATION] Train samples: ${dataset.trainData.length}, Test samples: ${dataset.testData.length}`
+      `✅ [VALIDATION] Train samples: ${trainData.length}, Test samples: ${testData.length}`
     );
 
     // Extract config
@@ -163,10 +168,8 @@ router.post("/", async (req, res) => {
 
     // Validation Rule 2: Check target column exists in both datasets
     console.log("📊 [VALIDATION] Checking target column existence...");
-    const trainHasTarget =
-      dataset.trainData.length > 0 && targetColumn in dataset.trainData[0];
-    const testHasTarget =
-      dataset.testData.length > 0 && targetColumn in dataset.testData[0];
+    const trainHasTarget = trainData.length > 0 && targetColumn in trainData[0];
+    const testHasTarget = testData.length > 0 && targetColumn in testData[0];
 
     if (!trainHasTarget || !testHasTarget) {
       console.error(
@@ -188,13 +191,13 @@ router.post("/", async (req, res) => {
     // Prepare training and test data
     console.log("📊 [PREPROCESSING] Preparing features and labels...");
     const { X: XTrain, y: yTrain } = prepareData(
-      dataset.trainData,
+      trainData,
       targetColumn,
       featureColumns,
       taskType
     );
     const { X: XTest, y: yTest } = prepareData(
-      dataset.testData,
+      testData,
       targetColumn,
       featureColumns,
       taskType
@@ -362,16 +365,28 @@ router.post("/", async (req, res) => {
       index: i,
     }));
 
-    // Store model results
+    // Store model results with timestamp to support multiple models
+    const timestamp = Date.now();
+    const modelKey = `model_${modelType}_${timestamp}`;
+
+    // Get existing model results or initialize
+    const existingModels = dataset.modelResults || {};
+
     updateDataset(fileId, {
-      modelConfig: config,
       modelResults: {
-        trainMetrics,
-        testMetrics,
-        featureImportance,
-        trainingTime,
-        predictionsSample,
+        ...existingModels,
+        [modelKey]: {
+          modelConfig: config,
+          trainMetrics,
+          testMetrics,
+          featureImportance,
+          trainingTime,
+          predictionsSample,
+          timestamp,
+        },
       },
+      // Keep the latest model config for backward compatibility
+      modelConfig: config,
     });
 
     console.log("✅ [SUCCESS] Model training and evaluation complete!");
