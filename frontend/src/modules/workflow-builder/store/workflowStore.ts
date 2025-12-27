@@ -86,7 +86,17 @@ export const useWorkflowStore = create<WorkflowStore>()(
           (state) => ({
             nodes: state.nodes.map((node) =>
               node.id === nodeId
-                ? ({ ...node, ...updates, validated: false } as WorkflowNode)
+                ? ({
+                    ...node,
+                    ...updates,
+                    // Only reset validation if config is being updated
+                    validated:
+                      "validated" in updates
+                        ? updates.validated
+                        : updates.config
+                        ? false
+                        : node.validated,
+                  } as WorkflowNode)
                 : node
             ),
           }),

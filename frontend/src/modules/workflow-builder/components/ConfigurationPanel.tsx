@@ -34,8 +34,17 @@ interface ConfigurationPanelProps {
 // Smart Suggestion Box
 // ============================================
 
+interface Suggestion {
+  title: string;
+  description: string;
+  nextSteps?: string[];
+  tip?: string;
+  explanation?: string[];
+  methods?: string[];
+}
+
 function SuggestionBox({ node }: { node: WorkflowNode }) {
-  const getSuggestion = () => {
+  const getSuggestion = (): Suggestion => {
     switch (node.type) {
       case "dataset":
         return {
@@ -434,22 +443,20 @@ function DatasetConfig({ node }: { node: DatasetNodeConfig }) {
 
       console.log("Upload response:", response);
 
-      // The backend returns { success: true, data: { fileId, fileName, columns, ... } }
-      const fileData = response.data || response;
-
+      // Response is FileUploadResponse type with direct properties
       // Update node with file info and columns
       updateNode(node.id, {
         config: {
           ...node.config,
-          fileName: fileData.fileName,
-          fileId: fileData.fileId,
-          columns: fileData.columns,
-          rowCount: fileData.rowCount,
-          columnCount: fileData.columnCount,
+          fileName: response.fileName,
+          fileId: response.fileId,
+          columns: response.columns,
+          rowCount: response.rowCount,
+          columnCount: response.columnCount,
         },
       });
 
-      console.log("Node updated with columns:", fileData.columns);
+      console.log("Node updated with columns:", response.columns);
     } catch (error) {
       console.error("File upload failed:", error);
       alert("Failed to upload file. Please try again.");
