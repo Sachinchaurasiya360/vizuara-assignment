@@ -186,6 +186,14 @@ function ExecutionResults({
                     {/* Show results for completed steps */}
                     {isCompleted && stepResult.data && (
                       <div className="mt-2 space-y-2">
+                        {/* Debug log */}
+                        {console.log(
+                          "Step Result for",
+                          node?.type,
+                          ":",
+                          stepResult
+                        )}
+
                         {/* Dataset results */}
                         {node?.type === "dataset" && stepResult.fileId && (
                           <div className="text-xs bg-white p-2 rounded border border-green-200">
@@ -199,57 +207,58 @@ function ExecutionResults({
                         )}
 
                         {/* Preprocessing results */}
-                        {node?.type === "preprocessing" &&
-                          stepResult.data.data && (
-                            <div className="text-xs bg-white p-2 rounded border border-green-200">
-                              <p className="font-semibold text-green-800 mb-1">
-                                ✓ Data preprocessed
-                              </p>
-                              {stepResult.data.data.totalRows && (
-                                <p className="text-slate-600">
-                                  {stepResult.data.data.totalRows} rows
-                                  processed
-                                </p>
-                              )}
-                            </div>
-                          )}
-
-                        {/* Split results */}
-                        {node?.type === "split" && stepResult.data.data && (
+                        {node?.type === "preprocessing" && stepResult.data && (
                           <div className="text-xs bg-white p-2 rounded border border-green-200">
                             <p className="font-semibold text-green-800 mb-1">
-                              ✓ Data split complete
+                              ✓ Data preprocessed
                             </p>
-                            <div className="flex justify-between mt-1">
-                              <span className="text-slate-600">Train:</span>
-                              <span className="font-medium">
-                                {stepResult.data.data.trainSize} samples
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-slate-600">Test:</span>
-                              <span className="font-medium">
-                                {stepResult.data.data.testSize} samples
-                              </span>
-                            </div>
+                            {(stepResult.data as any).data?.totalRows && (
+                              <p className="text-slate-600">
+                                {(stepResult.data as any).data.totalRows} rows
+                                processed
+                              </p>
+                            )}
                           </div>
                         )}
 
+                        {/* Split results */}
+                        {node?.type === "split" &&
+                          (stepResult.data as any)?.data && (
+                            <div className="text-xs bg-white p-2 rounded border border-green-200">
+                              <p className="font-semibold text-green-800 mb-1">
+                                ✓ Data split complete
+                              </p>
+                              <div className="flex justify-between mt-1">
+                                <span className="text-slate-600">Train:</span>
+                                <span className="font-medium">
+                                  {(stepResult.data as any).data.trainSize}{" "}
+                                  samples
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-slate-600">Test:</span>
+                                <span className="font-medium">
+                                  {(stepResult.data as any).data.testSize}{" "}
+                                  samples
+                                </span>
+                              </div>
+                            </div>
+                          )}
+
                         {/* Model results with metrics */}
-                        {node?.type === "model" && stepResult.data.data && (
+                        {node?.type === "model" && stepResult.data && (
                           <div className="text-xs bg-white p-3 rounded border border-green-200 space-y-2">
                             <p className="font-semibold text-green-800 mb-2">
                               🎯 Model Performance
                             </p>
 
-                            {stepResult.data.data.testMetrics && (
+                            {/* Try direct access first (stepResult.data.testMetrics) */}
+                            {stepResult.data.testMetrics && (
                               <div className="space-y-1">
                                 <p className="font-semibold text-slate-700 text-xs">
                                   Test Set Metrics:
                                 </p>
-                                {Object.entries(
-                                  stepResult.data.data.testMetrics
-                                )
+                                {Object.entries(stepResult.data.testMetrics)
                                   .filter(
                                     ([key]) =>
                                       !key.includes("confusion") &&
@@ -274,21 +283,76 @@ function ExecutionResults({
                               </div>
                             )}
 
-                            {stepResult.data.data.modelInfo && (
+                            {/* Try nested access (stepResult.data.data.testMetrics) */}
+                            {!stepResult.data.testMetrics &&
+                              (stepResult.data as any)?.data?.testMetrics && (
+                                <div className="space-y-1">
+                                  <p className="font-semibold text-slate-700 text-xs">
+                                    Test Set Metrics:
+                                  </p>
+                                  {Object.entries(
+                                    (stepResult.data as any).data.testMetrics
+                                  )
+                                    .filter(
+                                      ([key]) =>
+                                        !key.includes("confusion") &&
+                                        !key.includes("Matrix")
+                                    )
+                                    .slice(0, 6)
+                                    .map(([key, value]: any) => (
+                                      <div
+                                        key={key}
+                                        className="flex justify-between"
+                                      >
+                                        <span className="text-slate-600 capitalize">
+                                          {key
+                                            .replace(/([A-Z])/g, " $1")
+                                            .trim()}
+                                          :
+                                        </span>
+                                        <span className="font-medium">
+                                          {typeof value === "number"
+                                            ? value.toFixed(4)
+                                            : value}
+                                        </span>
+                                      </div>
+                                    ))}
+                                </div>
+                              )}
+
+                            {/* Model info */}
+                            {(stepResult.data.modelInfo ||
+                              (stepResult.data as any)?.data?.modelInfo) && (
                               <div className="pt-2 border-t border-green-100">
                                 <p className="text-slate-600">
                                   Model:{" "}
-                                  {stepResult.data.data.modelInfo.type?.replace(
-                                    /_/g,
-                                    " "
-                                  )}
+                                  {(
+                                    stepResult.data.modelInfo?.type ||
+                                    (stepResult.data as any)?.data?.modelInfo
+                                      ?.type
+                                  )?.replace(/_/g, " ")}
                                 </p>
                                 <p className="text-slate-600">
                                   Training time:{" "}
-                                  {stepResult.data.data.trainingTime}
+                                  {stepResult.data.trainingTime ||
+                                    (stepResult.data as any)?.data
+                                      ?.trainingTime}
                                 </p>
                               </div>
                             )}
+
+                            {/* Debug info if metrics not found */}
+                            {!stepResult.data.testMetrics &&
+                              !(stepResult.data as any)?.data?.testMetrics && (
+                                <div className="p-2 bg-yellow-50 border border-yellow-200 rounded">
+                                  <p className="text-xs text-yellow-800 font-semibold mb-1">
+                                    ⚠️ Data Structure Debug
+                                  </p>
+                                  <pre className="text-xs text-yellow-700 overflow-auto max-h-40">
+                                    {JSON.stringify(stepResult.data, null, 2)}
+                                  </pre>
+                                </div>
+                              )}
                           </div>
                         )}
                       </div>
@@ -426,7 +490,7 @@ export function WorkflowBuilderPage() {
               console.log(`✓ Dataset step complete. FileId: ${currentFileId}`);
               break;
 
-            case "preprocessing":
+            case "preprocessing": {
               currentFileId = getFileIdFromDependencies();
               if (!currentFileId) throw new Error("No dataset file ID");
 
@@ -483,8 +547,9 @@ export function WorkflowBuilderPage() {
                 `✓ Preprocessing step complete. Using FileId: ${currentFileId}`
               );
               break;
+            }
 
-            case "split":
+            case "split": {
               currentFileId = getFileIdFromDependencies();
               if (!currentFileId) throw new Error("No dataset file ID");
               console.log(`→ Split using FileId: ${currentFileId}`);
@@ -501,8 +566,9 @@ export function WorkflowBuilderPage() {
               };
               console.log(`✓ Split step complete`);
               break;
+            }
 
-            case "model":
+            case "model": {
               currentFileId = getFileIdFromDependencies();
               if (!currentFileId) throw new Error("No dataset file ID");
               console.log(`→ Model training using FileId: ${currentFileId}`);
@@ -521,6 +587,7 @@ export function WorkflowBuilderPage() {
               };
               console.log(`✓ Model training complete`);
               break;
+            }
 
             case "evaluation":
               // Evaluation results come from the model training
