@@ -281,7 +281,35 @@ router.post("/", async (req, res) => {
         message: `Training labels contain only one class: ${uniqueTrainLabels[0]}. Model cannot learn with only one class. Please check your data split or select a different target column.`,
       });
     }
-    console.log(`✅ [VALIDATION] Class distribution is valid for ${taskType}`);
+
+    // Validation Rule 3: Check if target column has too many unique values for classification
+    const MAX_CLASSES_FOR_CLASSIFICATION = 10;
+    if (
+      taskType === "classification" &&
+      uniqueTrainLabels.length > MAX_CLASSES_FOR_CLASSIFICATION
+    ) {
+      console.error(
+        `❌ [ERROR:${requestId}] Too many classes for classification: ${uniqueTrainLabels.length} unique values`
+      );
+      return res.status(400).json({
+        success: false,
+        message: `The target column "${targetColumn}" has ${uniqueTrainLabels.length} unique values, which is too many for classification (maximum ${MAX_CLASSES_FOR_CLASSIFICATION} recommended).`,
+        suggestion: `This column appears to contain continuous values (like age, price, etc.). Please either:
+• Use Regression task type instead of Classification
+• Select a different target column with fewer categories (2-${MAX_CLASSES_FOR_CLASSIFICATION} classes)
+• Create bins/categories from this column before training`,
+        details: {
+          uniqueClasses: uniqueTrainLabels.length,
+          maxAllowed: MAX_CLASSES_FOR_CLASSIFICATION,
+          targetColumn,
+          sampleValues: [...new Set(yTrain)].slice(0, 10),
+        },
+      });
+    }
+
+    console.log(
+      `✅ [VALIDATION:${requestId}] Class distribution is valid for ${taskType}`
+    );
 
     // Initialize and train model
     let model;
@@ -448,7 +476,7 @@ router.post("/", async (req, res) => {
     );
     console.log(`   Existing models: ${Object.keys(existingModels).length}`);
 
-    updateDataset(fileId, {
+    await updateDataset(fileId, {
       modelResults: {
         ...existingModels,
         [modelKey]: {

@@ -118,7 +118,7 @@ router.post("/", async (req, res) => {
     }
 
     // Update dataset with preprocessed data
-    updateDataset(fileId, {
+    await updateDataset(fileId, {
       processedData,
       preprocessConfig: config,
       transformations,

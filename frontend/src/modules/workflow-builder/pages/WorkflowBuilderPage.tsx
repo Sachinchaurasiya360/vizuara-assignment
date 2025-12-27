@@ -178,9 +178,38 @@ function ExecutionResults({
                       )}
                     </div>
                     {hasError && stepResult.error && (
-                      <p className="text-xs text-red-700 mt-1 bg-red-100 p-2 rounded">
-                        {stepResult.error}
-                      </p>
+                      <div className="text-xs mt-1 space-y-2">
+                        <div className="bg-red-100 border border-red-300 p-3 rounded">
+                          <p className="text-red-800 font-semibold mb-1">
+                            ❌ Error
+                          </p>
+                          <p className="text-red-700 whitespace-pre-line">
+                            {stepResult.error}
+                          </p>
+                        </div>
+
+                        {stepResult.suggestion && (
+                          <div className="bg-yellow-50 border border-yellow-300 p-3 rounded">
+                            <p className="text-yellow-800 font-semibold mb-1">
+                              💡 Suggestion
+                            </p>
+                            <p className="text-yellow-700 whitespace-pre-line">
+                              {stepResult.suggestion}
+                            </p>
+                          </div>
+                        )}
+
+                        {stepResult.details && (
+                          <details className="bg-slate-50 border border-slate-300 p-2 rounded">
+                            <summary className="text-slate-700 font-medium cursor-pointer">
+                              Details
+                            </summary>
+                            <pre className="text-xs text-slate-600 mt-2 overflow-auto">
+                              {JSON.stringify(stepResult.details, null, 2)}
+                            </pre>
+                          </details>
+                        )}
+                      </div>
                     )}
 
                     {/* Show results for completed steps */}
@@ -608,14 +637,29 @@ export function WorkflowBuilderPage() {
           }
         } catch (stepError: any) {
           console.error(`Error executing step ${i + 1}:`, stepError);
+
+          // Extract detailed error message and suggestion if available
+          const errorMessage = stepError.message || "Execution failed";
+          const suggestion = stepError.suggestion || "";
+          const details = stepError.details;
+
           results[step.nodeId] = {
             type: node.type,
             status: "error",
-            error: stepError.message || "Execution failed",
+            error: errorMessage,
+            suggestion: suggestion,
+            details: details,
           };
-          setError(
-            `Failed at step ${i + 1} (${node.type}): ${stepError.message}`
-          );
+
+          // Format error message with suggestion if available
+          let displayError = `Failed at step ${i + 1} (${
+            node.type
+          }): ${errorMessage}`;
+          if (suggestion) {
+            displayError += `\n\n${suggestion}`;
+          }
+
+          setError(displayError);
           break;
         }
       }

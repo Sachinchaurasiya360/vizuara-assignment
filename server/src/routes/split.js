@@ -73,7 +73,7 @@ router.post("/", async (req, res) => {
     const headers = trainData.length > 0 ? Object.keys(trainData[0]) : [];
 
     // Update dataset with split data
-    updateDataset(fileId, {
+    await updateDataset(fileId, {
       trainData,
       testData,
       splitConfig: {
