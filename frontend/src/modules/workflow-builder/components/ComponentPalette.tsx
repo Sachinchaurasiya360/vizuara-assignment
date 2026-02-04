@@ -133,16 +133,7 @@ export function ComponentPalette({ onDragStart }: ComponentPaletteProps) {
         )}
       </div>
 
-      {/* Footer Tip */}
-      <div className="p-4 border-t border-slate-200 bg-slate-50">
-        <div className="flex items-start gap-2 text-xs text-slate-600">
-          <span className="text-sm">💡</span>
-          <p>
-            Drag components onto the canvas to build your ML pipeline. Connect
-            nodes by dragging from output to input handles.
-          </p>
-        </div>
-      </div>
+      
     </div>
   );
 }

@@ -427,6 +427,7 @@ function DatasetConfig({ node }: { node: DatasetNodeConfig }) {
   const { updateNode } = useWorkflowStore();
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [loadingPreset, setLoadingPreset] = useState(false);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -466,39 +467,135 @@ function DatasetConfig({ node }: { node: DatasetNodeConfig }) {
     }
   };
 
+  const handleLoadPresetDataset = async (
+    datasetType: "classification" | "regression",
+  ) => {
+    try {
+      setLoadingPreset(true);
+
+      // Determine which dataset to load
+      const datasetPath =
+        datasetType === "classification"
+          ? "/sample-data/classification_dataset.csv"
+          : "/sample-data/Regression.csv";
+
+      const fileName =
+        datasetType === "classification"
+          ? "classification_dataset.csv"
+          : "Regression.csv";
+
+      // Fetch the preset dataset file
+      const response = await fetch(datasetPath);
+      const blob = await response.blob();
+      const file = new File([blob], fileName, { type: "text/csv" });
+
+      // Upload it using the existing upload logic
+      setUploadProgress(0);
+      const uploadResponse = await uploadFile(file, (progress) => {
+        setUploadProgress(progress);
+      });
+
+      // Update node with file info and columns
+      updateNode(node.id, {
+        config: {
+          ...node.config,
+          fileName: uploadResponse.fileName,
+          fileId: uploadResponse.fileId,
+          columns: uploadResponse.columns,
+          rowCount: uploadResponse.rowCount,
+          columnCount: uploadResponse.columnCount,
+        },
+      });
+
+      console.log(`Loaded ${datasetType} dataset:`, uploadResponse);
+    } catch (error) {
+      console.error(`Failed to load ${datasetType} dataset:`, error);
+      alert(`Failed to load ${datasetType} dataset. Please try again.`);
+    } finally {
+      setLoadingPreset(false);
+      setUploadProgress(0);
+    }
+  };
+
   return (
-    <Card className="p-4">
-      <Label className="mb-2 block">Upload Dataset</Label>
+    <Card className="p-4 space-y-4">
+      <div>
+        <Label className="mb-2 block">Load Sample Dataset</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            onClick={() => handleLoadPresetDataset("classification")}
+            disabled={uploading || loadingPreset}
+            className="w-full text-sm"
+          >
+            {loadingPreset ? (
+              <Loader className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <span className="mr-2">📊</span>
+            )}
+            Classification
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => handleLoadPresetDataset("regression")}
+            disabled={uploading || loadingPreset}
+            className="w-full text-sm"
+          >
+            {loadingPreset ? (
+              <Loader className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <span className="mr-2">📈</span>
+            )}
+            Regression
+          </Button>
+        </div>
+      </div>
 
-      {uploading ? (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm text-blue-600">
-            <Loader className="h-4 w-4 animate-spin" />
-            <span>Uploading... {uploadProgress}%</span>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-300"></div>
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white px-2 text-slate-500">Or</span>
+        </div>
+      </div>
+
+      <div>
+        <Label className="mb-2 block">Upload Your Dataset</Label>
+        {uploading || loadingPreset ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm text-blue-600">
+              <Loader className="h-4 w-4 animate-spin" />
+              <span>
+                {loadingPreset
+                  ? "Loading dataset..."
+                  : `Uploading... ${uploadProgress}%`}
+              </span>
+            </div>
+            <div className="w-full bg-slate-200 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
           </div>
-          <div className="w-full bg-slate-200 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full transition-all"
-              style={{ width: `${uploadProgress}%` }}
+        ) : (
+          <div className="relative">
+            <Input
+              type="file"
+              accept=".csv,.xlsx,.xls"
+              onChange={handleFileUpload}
+              className="cursor-pointer"
             />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <Upload className="h-4 w-4 text-slate-400" />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="relative">
-          <Input
-            type="file"
-            accept=".csv,.xlsx,.xls"
-            onChange={handleFileUpload}
-            className="cursor-pointer"
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <Upload className="h-4 w-4 text-slate-400" />
-          </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {node.config.fileName && !uploading && (
-        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
+      {node.config.fileName && !uploading && !loadingPreset && (
+        <div className="p-3 bg-green-50 border border-green-200 rounded">
           <div className="flex items-start gap-2">
             <span className="text-green-600 text-xl">✓</span>
             <div className="flex-1">

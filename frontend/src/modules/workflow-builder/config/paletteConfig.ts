@@ -77,7 +77,7 @@ export const PALETTE_ITEMS: PaletteItem[] = [
     label: "Train-Test Split",
     description: "Split data into training and testing sets",
     icon: "✂️",
-    category: "data",
+    category: "preprocessing",
     color: "#10b981", // green
   },
 
