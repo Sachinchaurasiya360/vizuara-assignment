@@ -45,42 +45,42 @@ export function SplitStep() {
     <div className="space-y-6">
       {/* Beginner-friendly explanation */}
       {!splitResult && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
-          <h4 className="font-semibold text-amber-900 mb-3 flex items-center gap-2 text-lg">
+        <div className="bg-white/50 border border-black rounded-lg p-5">
+          <h4 className="font-semibold text-black mb-3 flex items-center gap-2 text-lg">
             <Sparkles className="h-5 w-5" />
             📖 Step 3: Split Your Data
           </h4>
-          <p className="text-sm text-amber-900 mb-3 leading-relaxed">
+          <p className="text-sm text-black mb-3 leading-relaxed">
             <strong>Think of it like studying for an exam:</strong> You practice
             on some questions (Training Data) and then test yourself on NEW
             questions (Testing Data) to see if you really understood!
           </p>
           <div className="bg-white/50 rounded-lg p-3 mb-3 space-y-2">
             <div>
-              <p className="text-sm text-amber-900 font-semibold">
+              <p className="text-sm text-black font-semibold">
                 📚 Training Data (80%):
               </p>
-              <p className="text-xs text-amber-800 ml-4">
+              <p className="text-xs text-black ml-4">
                 This is like your practice questions. The machine learns
                 patterns from this data. The more examples it sees, the better
                 it learns!
               </p>
             </div>
             <div>
-              <p className="text-sm text-amber-900 font-semibold">
+              <p className="text-sm text-black font-semibold">
                 ✅ Testing Data (20%):
               </p>
-              <p className="text-xs text-amber-800 ml-4">
+              <p className="text-xs text-black-800 ml-4">
                 This is like your final exam questions. The machine has NEVER
                 seen this data before. We use it to check if the machine really
                 learned or just memorized!
               </p>
             </div>
           </div>
-          <p className="text-sm text-amber-800 font-semibold mb-1">
+          <p className="text-sm text-black font-semibold mb-1">
             ✨ <strong>Which ratio should I choose?</strong>
           </p>
-          <p className="text-xs text-amber-700 leading-relaxed">
+          <p className="text-xs text-black leading-relaxed">
             <strong>80-20 split is recommended!</strong> It gives enough data
             for learning (80%) while keeping enough for fair testing (20%). Just
             like solving 80% practice questions and keeping 20% for mock tests!

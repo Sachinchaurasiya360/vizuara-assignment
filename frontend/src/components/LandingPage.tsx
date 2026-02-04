@@ -77,7 +77,6 @@ export function LandingPage() {
                 onClick={() => navigate("/about")}
                 className="text-slate-600 hover:text-black transition-colors font-medium"
               >
-                About Developer
               </button>
               <Button
                 onClick={handleGetStarted}
@@ -179,7 +178,7 @@ export function LandingPage() {
               >
                 Classic Pipeline
               </Button>
-              <Button
+              {/* <Button
                 size="lg"
                 onClick={() => navigate("/model-evaluation")}
                 variant="outline"
@@ -187,7 +186,7 @@ export function LandingPage() {
               >
                 <BarChart3 className="mr-2 h-4 w-4" />
                 Model Evaluation
-              </Button>
+              </Button> */}
             </div>
 
             {/* Stats */}

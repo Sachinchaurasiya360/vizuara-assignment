@@ -50,12 +50,12 @@ export function PreprocessStep() {
     <div className="space-y-6">
       {/* Beginner-friendly explanation */}
       {!preprocessedData && (
-        <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
-          <h4 className="font-semibold text-purple-900 mb-3 flex items-center gap-2 text-lg">
+        <div className="bg-white/50 border border-gray-200 rounded-lg p-5">
+          <h4 className="font-semibold text-black mb-3 flex items-center gap-2 text-lg">
             <Sparkles className="h-5 w-5" />
             🧹 Step 2: Clean Your Data (Optional)
           </h4>
-          <p className="text-sm text-purple-900 mb-3 leading-relaxed">
+          <p className="text-sm text-black mb-3 leading-relaxed">
             <strong>Why Clean Data?</strong> Imagine comparing students' marks
             where one is in percentage (0-100) and another in GPA (0-10). The
             machine would think GPA students performed poorly! We need to make
@@ -63,28 +63,28 @@ export function PreprocessStep() {
           </p>
           <div className="bg-white/50 rounded-lg p-3 mb-3 space-y-2">
             <div>
-              <p className="text-sm text-purple-900 font-semibold">
+              <p className="text-sm text-black font-semibold">
                 🔢 Standardization:
               </p>
-              <p className="text-xs text-purple-800 ml-4">
+              <p className="text-xs text-black ml-4">
                 Converts all values to a similar range, so one column doesn't
                 dominate others. Like converting all marks to a 0-100 scale.
               </p>
             </div>
             <div>
-              <p className="text-sm text-purple-900 font-semibold">
+              <p className="text-sm text-black font-semibold">
                 📊 Normalization:
               </p>
-              <p className="text-xs text-purple-800 ml-4">
+              <p className="text-xs text-black ml-4">
                 Scales all values between 0 and 1. Think of it as converting
                 everything to percentages.
               </p>
             </div>
           </div>
-          <p className="text-sm text-purple-800 font-semibold mb-1">
+          <p className="text-sm text-black font-semibold mb-1">
             ⏭️ <strong>Can I skip this?</strong>
           </p>
-          <p className="text-xs text-purple-700 leading-relaxed">
+          <p className="text-xs text-black leading-relaxed">
             Yes! If your data is already clean or all columns are already in
             similar ranges, you can click "Continue Without Preprocessing"
             below. This step is optional!
