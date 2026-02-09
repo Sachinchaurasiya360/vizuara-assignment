@@ -109,8 +109,7 @@ export function LandingPage() {
               <button
                 onClick={() => navigate("/about")}
                 className="text-slate-600 hover:text-black transition-colors font-medium"
-              >
-              </button>
+              ></button>
               <Button
                 onClick={handleGetStarted}
                 className="bg-black hover:bg-slate-800 text-white"
@@ -350,7 +349,8 @@ export function LandingPage() {
               Features of Visual ML
             </h2>
             <p className="text-xl text-slate-600">
-              A comprehensive platform for building, training, and deploying machine learning models
+              A comprehensive platform for building, training, and deploying
+              machine learning models
             </p>
           </div>
 
@@ -363,7 +363,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Visual Pipeline Builder</CardTitle>
                 <CardDescription>
-                  Drag-and-drop node editor with preloaded templates, logic blocks, and real-time execution with logs
+                  Drag-and-drop node editor with preloaded templates, logic
+                  blocks, and real-time execution with logs
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -376,7 +377,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Data Upload & Preview</CardTitle>
                 <CardDescription>
-                  CSV upload with interactive preview table, sorting, and filtering capabilities
+                  CSV upload with interactive preview table, sorting, and
+                  filtering capabilities
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -389,7 +391,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Data Visualization</CardTitle>
                 <CardDescription>
-                  Bar charts, histograms, line graphs, and statistical visualizations for data exploration
+                  Bar charts, histograms, line graphs, and statistical
+                  visualizations for data exploration
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -402,7 +405,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Data Cleaning & Stats</CardTitle>
                 <CardDescription>
-                  Drop nulls, select columns, handle missing values, calculate mean, median, mode, and statistics
+                  Drop nulls, select columns, handle missing values, calculate
+                  mean, median, mode, and statistics
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -415,7 +419,9 @@ export function LandingPage() {
                 </div>
                 <CardTitle>16+ ML Algorithms</CardTitle>
                 <CardDescription>
-                  Linear/Logistic Regression, Decision Tree, Random Forest, GBoost, SVM, KNN, Naive Bayes, K-Means, Neural Networks, CNN, and NLP models
+                  Linear/Logistic Regression, Decision Tree, Random Forest,
+                  GBoost, SVM, KNN, Naive Bayes, K-Means, Neural Networks, CNN,
+                  and NLP models
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -428,7 +434,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Model Evaluation</CardTitle>
                 <CardDescription>
-                  Accuracy, precision, recall, F1-score, RMSE, MAE, confusion matrix, ROC curves, and feature importance
+                  Accuracy, precision, recall, F1-score, RMSE, MAE, confusion
+                  matrix, ROC curves, and feature importance
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -441,7 +448,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Model Deployment</CardTitle>
                 <CardDescription>
-                  One-click deployment with auto-generated REST API endpoints for instant model serving
+                  One-click deployment with auto-generated REST API endpoints
+                  for instant model serving
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -454,7 +462,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Code Export</CardTitle>
                 <CardDescription>
-                  Export pipeline as Python code or scikit-learn script for production use
+                  Export pipeline as Python code or scikit-learn script for
+                  production use
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -467,7 +476,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Custom UI Builder</CardTitle>
                 <CardDescription>
-                  Drag-and-drop interface builder with buttons, inputs, charts, and direct data binding to predictions
+                  Drag-and-drop interface builder with buttons, inputs, charts,
+                  and direct data binding to predictions
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -480,7 +490,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Hardware Integration</CardTitle>
                 <CardDescription>
-                  Web Serial and Bluetooth support for sensors, Arduino, and IoT devices with real-time predictions
+                  Web Serial and Bluetooth support for sensors, Arduino, and IoT
+                  devices with real-time predictions
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -493,7 +504,8 @@ export function LandingPage() {
                 </div>
                 <CardTitle>AI Assistant</CardTitle>
                 <CardDescription>
-                  Built-in LLM assistant with node explanations, next-step suggestions, and auto-pipeline generation
+                  Built-in LLM assistant with node explanations, next-step
+                  suggestions, and auto-pipeline generation
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -506,10 +518,127 @@ export function LandingPage() {
                 </div>
                 <CardTitle>Save & Share</CardTitle>
                 <CardDescription>
-                  Save projects and generate shareable read-only links for collaboration
+                  Save projects and generate shareable read-only links for
+                  collaboration
                 </CardDescription>
               </CardHeader>
             </Card>
+          </div>
+
+          {/* GenAI Features Subsection */}
+          <div className="mt-20">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-slate-900 mb-4">
+                GenAI Features
+              </h3>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                Intelligent AI-powered assistance to guide you through every
+                step of your machine learning journey
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+             
+
+              {/* Debug Bot */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <Bot className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>AI Debug Assistant</CardTitle>
+                  <CardDescription>
+                    Intelligent bot analyzes errors, logs, and failures to
+                    provide clear debugging guidance
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              {/* Detect Mistakes */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <Target className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>Mistake Detection</CardTitle>
+                  <CardDescription>
+                    Automatically detects common errors like missing target
+                    columns, wrong metrics, and data leakage issues
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              {/* Performance Analysis */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <Activity className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>Performance Analyzer</CardTitle>
+                  <CardDescription>
+                    Ask "Why is accuracy low?" and get AI-powered insights on
+                    model performance and improvement strategies
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              {/* Sentiment Analysis */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <Brain className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>Sentiment Analysis</CardTitle>
+                  <CardDescription>
+                    Built-in NLP nodes for text sentiment analysis, emotion
+                    detection, and text classification
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              {/* Pipeline to Report */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <BookOpen className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>Pipeline to Report</CardTitle>
+                  <CardDescription>
+                    Convert your entire pipeline into a clear, shareable
+                    explanation or comprehensive analysis report
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              {/* RAG Apps */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <Database className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>RAG App Builder</CardTitle>
+                  <CardDescription>
+                    Create Retrieval-Augmented Generation apps - upload PDFs and
+                    build intelligent Q&A chatbots instantly
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              {/* Image Generation */}
+              <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                    <Camera className="h-6 w-6 text-black" />
+                  </div>
+                  <CardTitle>AI Image Generation</CardTitle>
+                  <CardDescription>
+                    Generate images using state-of-the-art AI models with
+                    text-to-image capabilities
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
