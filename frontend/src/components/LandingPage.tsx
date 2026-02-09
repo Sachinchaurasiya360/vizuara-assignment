@@ -12,6 +12,39 @@ import {
   CheckCircle,
   Menu,
   X,
+  Blocks,
+  Play,
+  Share2,
+  FileCode,
+  Code2,
+  Database,
+  Table,
+  TrendingUp,
+  Sparkles,
+  Droplets,
+  Calculator,
+  Network,
+  GitBranch,
+  TreeDeciduous,
+  Target,
+  Activity,
+  Cloud,
+  Download,
+  Terminal,
+  Server,
+  Layout,
+  MousePointer,
+  Camera,
+  Bluetooth,
+  Cpu,
+  Radio,
+  Lightbulb,
+  Bot,
+  MessageSquare,
+  Wand2,
+  Key,
+  Video,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -302,6 +335,178 @@ export function LandingPage() {
                 <CardDescription>
                   Designed for beginners and experts alike. No machine learning
                   knowledge required.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Features of Visual ML */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              Features of Visual ML
+            </h2>
+            <p className="text-xl text-slate-600">
+              A comprehensive platform for building, training, and deploying machine learning models
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Pipeline Builder */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Workflow className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Visual Pipeline Builder</CardTitle>
+                <CardDescription>
+                  Drag-and-drop node editor with preloaded templates, logic blocks, and real-time execution with logs
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Data Upload & Preview */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Database className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Data Upload & Preview</CardTitle>
+                <CardDescription>
+                  CSV upload with interactive preview table, sorting, and filtering capabilities
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Visualization & Charts */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Data Visualization</CardTitle>
+                <CardDescription>
+                  Bar charts, histograms, line graphs, and statistical visualizations for data exploration
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Data Cleaning */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Droplets className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Data Cleaning & Stats</CardTitle>
+                <CardDescription>
+                  Drop nulls, select columns, handle missing values, calculate mean, median, mode, and statistics
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* ML Algorithms */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Brain className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>16+ ML Algorithms</CardTitle>
+                <CardDescription>
+                  Linear/Logistic Regression, Decision Tree, Random Forest, GBoost, SVM, KNN, Naive Bayes, K-Means, Neural Networks, CNN, and NLP models
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Model Evaluation */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <BarChart3 className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Model Evaluation</CardTitle>
+                <CardDescription>
+                  Accuracy, precision, recall, F1-score, RMSE, MAE, confusion matrix, ROC curves, and feature importance
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Deployment */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Cloud className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Model Deployment</CardTitle>
+                <CardDescription>
+                  One-click deployment with auto-generated REST API endpoints for instant model serving
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Code Export */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Code2 className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Code Export</CardTitle>
+                <CardDescription>
+                  Export pipeline as Python code or scikit-learn script for production use
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* UI Builder */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Layout className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Custom UI Builder</CardTitle>
+                <CardDescription>
+                  Drag-and-drop interface builder with buttons, inputs, charts, and direct data binding to predictions
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Hardware Integration */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Cpu className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Hardware Integration</CardTitle>
+                <CardDescription>
+                  Web Serial and Bluetooth support for sensors, Arduino, and IoT devices with real-time predictions
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* AI Assistant */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Bot className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>AI Assistant</CardTitle>
+                <CardDescription>
+                  Built-in LLM assistant with node explanations, next-step suggestions, and auto-pipeline generation
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            {/* Share & Collaborate */}
+            <Card className="border-2 hover:border-black hover:shadow-lg transition-all">
+              <CardHeader>
+                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+                  <Share2 className="h-6 w-6 text-black" />
+                </div>
+                <CardTitle>Save & Share</CardTitle>
+                <CardDescription>
+                  Save projects and generate shareable read-only links for collaboration
                 </CardDescription>
               </CardHeader>
             </Card>
